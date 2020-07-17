@@ -1,0 +1,188 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: AirCdn Infrastructure (CloudFront->[S3,ApiGateway])
+Parameters:
+  DomainName:
+    Type: String
+    Default: <DomainName>
+  DomainNameRedirect:
+    Type: String
+    Default: <DomainNameRedirect>
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [prod, dev, avery]
+  EarthBucketBasicAuthLambdaEdgeVersion:
+    Type: String
+    Default: <EarthBucketBasicAuthLambdaEdgeVersion>
+  WaterApiAuthenticatedApiUrl:
+    Type: String
+    Default: <WaterApiAuthenticatedApiUrl>
+  WaterApiUnauthenticatedApiUrl:
+    Type: String
+    Default: <WaterApiUnauthenticatedApiUrl>
+Resources:
+  #CloudFront
+  AirCdn:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: !Sub "<Namespace>-${Environment} AirCdn for EarthBucket site and WaterApi api"
+        Aliases:
+        - !Ref DomainName
+        Enabled: 'true'
+        DefaultCacheBehavior:
+          TargetOriginId: earthbucket
+          ViewerProtocolPolicy: redirect-to-https
+          Compress: true
+          # DefaultTTL and MaxTTL do not modify the response object
+          # but they enable CloudFront to allow the 'Cache-Control' headers to be sent from Lambda@Edge
+          # for more information: - https://stackoverflow.com/questions/58915273/cloudfront-customize-object-caching-does-not-work
+          DefaultTTL: 31536000 #365 days in seconds
+          LambdaFunctionAssociations:
+            - EventType: viewer-request
+              # <SAM-Function.Version> provides {FunctionARN}:{Version} which is exactly what Cloudfront expects
+              # SAM Benefit here is upon function changes this function version will also be updated in Cloudfront
+              LambdaFunctionARN: !Ref EarthBucketBasicAuthLambdaEdgeVersion
+          ForwardedValues:
+            QueryString: true
+        DefaultRootObject: index.html
+        CacheBehaviors:
+        - PathPattern: '/api/1/admin/*'
+          TargetOriginId: waterapi-authenticated-api
+          ViewerProtocolPolicy: https-only
+          AllowedMethods:
+          - DELETE
+          - GET
+          - HEAD
+          - OPTIONS
+          - PATCH
+          - POST
+          - PUT
+          CachedMethods:
+          - GET
+          - HEAD
+          - OPTIONS
+          Compress: true
+          ForwardedValues:
+            Headers:
+            - Accept
+            - Referer
+            - Authorization
+            - Content-Type
+            QueryString: true
+          MinTTL: 0
+          MaxTTL: 31536000 #365 days in seconds
+        - PathPattern: '/api/1/docs/*'
+          TargetOriginId: waterapi-docs
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: true
+          DefaultTTL: 31536000 #365 days in seconds
+        - PathPattern: '/api/1/*'
+          TargetOriginId: waterapi-unauthenticated-api
+          ViewerProtocolPolicy: https-only
+          AllowedMethods:
+          - DELETE
+          - GET
+          - HEAD
+          - OPTIONS
+          - PATCH
+          - POST
+          - PUT
+          CachedMethods:
+          - GET
+          - HEAD
+          - OPTIONS
+          Compress: true
+          ForwardedValues:
+            Headers:
+            - Accept
+            - Referer
+            - Authorization
+            - Content-Type
+            QueryString: true
+          MinTTL: 0
+          MaxTTL: 31536000 #365 days in seconds
+        Origins:
+        - DomainName: !Sub "<Namespace>-${Environment}-earthbucket-app.s3-website-${AWS::Region}.amazonaws.com"
+          Id: earthbucket
+          CustomOriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: http-only
+          OriginCustomHeaders:
+            - HeaderName: Referer
+              HeaderValue: !Sub "https://${DomainName}/"
+        - DomainName: !Sub "<Namespace>-${Environment}-waterapi-docs.s3-website-${AWS::Region}.amazonaws.com"
+          Id: waterapi-docs
+          CustomOriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: http-only
+          OriginCustomHeaders:
+            - HeaderName: Referer
+              HeaderValue: !Sub "https://${DomainName}/"
+        - DomainName: !Ref WaterApiAuthenticatedApiUrl
+          OriginPath: !Sub "/${Environment}"
+          Id: waterapi-authenticated-api
+          CustomOriginConfig:
+            OriginProtocolPolicy: https-only
+        - DomainName: !Ref WaterApiUnauthenticatedApiUrl
+          OriginPath: !Sub "/${Environment}"
+          Id: waterapi-unauthenticated-api
+          CustomOriginConfig:
+            OriginProtocolPolicy: https-only
+        ViewerCertificate:
+          AcmCertificateArn: !ImportValue <GlobalTLSCertificateArn>
+          MinimumProtocolVersion: TLSv1.1_2016
+          SslSupportMethod: sni-only
+        PriceClass: PriceClass_100
+  AirCdnRedirect:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: !Sub "<Namespace> ${Environment} AirCdnRedirect for AirCdn www redirect"
+        Aliases:
+        - !Ref DomainNameRedirect
+        Enabled: 'true'
+        DefaultCacheBehavior:
+          TargetOriginId: aircdn-redirect
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: true
+        Origins:
+        - DomainName: !Sub "${AirCdnRedirectS3Bucket}.s3-website-${AWS::Region}.amazonaws.com"
+          Id: aircdn-redirect
+          CustomOriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: http-only
+          OriginCustomHeaders:
+            - HeaderName: Referer
+              HeaderValue: !Sub "https://${DomainName}/"
+        ViewerCertificate:
+          AcmCertificateArn: !ImportValue <GlobalTLSCertificateArn>
+          MinimumProtocolVersion: TLSv1.1_2016
+          SslSupportMethod: sni-only
+        PriceClass: PriceClass_100
+  #S3
+  AirCdnRedirectS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Ref DomainNameRedirect
+      WebsiteConfiguration:
+        RedirectAllRequestsTo:
+          HostName: !Ref DomainName
+Outputs:
+  AirCdnDomainName:
+    Description: AirCdn domain name
+    Value: !GetAtt AirCdn.DomainName
+  AirCdnRedirectDomainName:
+    Description: AirCdnRedirect domain name
+    Value: !GetAtt AirCdnRedirect.DomainName
+  AirCdnDistributionId:
+    Description: AirCdn Distribution Id
+    Value: !Ref AirCdn
+    Export:
+      Name: !Sub <Namespace>-${Environment}-AirCdnDistributionId

@@ -1,0 +1,12 @@
+.DS_Store
+build
+templates
+node_modules
+cloudformation/aircdn.template.yaml
+cloudformation/earthbucket.template.yaml
+cloudformation/environment.template.yaml
+cloudformation/firerecord.template.yaml
+cloudformation/global.template.yaml
+cloudformation/waterapi.template.yaml
+cloudformation/waterapi-apikeys.template.yaml
+.env

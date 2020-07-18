@@ -47,6 +47,56 @@ Resources:
             QueryString: true
         DefaultRootObject: index.html
         CacheBehaviors:
+        - PathPattern: '/api/1/admin/magic-link'
+          TargetOriginId: waterapi-unauthenticated-api
+          ViewerProtocolPolicy: https-only
+          AllowedMethods:
+          - DELETE
+          - GET
+          - HEAD
+          - OPTIONS
+          - PATCH
+          - POST
+          - PUT
+          CachedMethods:
+          - GET
+          - HEAD
+          - OPTIONS
+          Compress: true
+          ForwardedValues:
+            Headers:
+            - Accept
+            - Referer
+            - Authorization
+            - Content-Type
+            QueryString: true
+          MinTTL: 0
+          MaxTTL: 31536000 #365 days in seconds
+        - PathPattern: '/api/1/admin/hash'
+          TargetOriginId: waterapi-unauthenticated-api
+          ViewerProtocolPolicy: https-only
+          AllowedMethods:
+          - DELETE
+          - GET
+          - HEAD
+          - OPTIONS
+          - PATCH
+          - POST
+          - PUT
+          CachedMethods:
+          - GET
+          - HEAD
+          - OPTIONS
+          Compress: true
+          ForwardedValues:
+            Headers:
+            - Accept
+            - Referer
+            - Authorization
+            - Content-Type
+            QueryString: true
+          MinTTL: 0
+          MaxTTL: 31536000 #365 days in seconds
         - PathPattern: '/api/1/admin/*'
           TargetOriginId: waterapi-authenticated-api
           ViewerProtocolPolicy: https-only
@@ -72,7 +122,7 @@ Resources:
             QueryString: true
           MinTTL: 0
           MaxTTL: 31536000 #365 days in seconds
-        - PathPattern: '/api/1/docs/*'
+        - PathPattern: '/api/1/docs*'
           TargetOriginId: waterapi-docs
           ViewerProtocolPolicy: redirect-to-https
           ForwardedValues:

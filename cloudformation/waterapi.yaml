@@ -35,7 +35,7 @@ Resources:
         x-amazon-apigateway-binary-media-types:
           - '*/*'
         paths:
-          /api/1/inventory/items:
+          /api/1/album/posts:
             get:
               x-amazon-apigateway-integration:
                 httpMethod: POST
@@ -58,7 +58,7 @@ Resources:
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WaterApiLambda.Arn}/invocations
                 passthroughBehavior: "when_no_match"
               responses: {}
-          /api/1/inventory/admin/magic-link:
+          /api/1/admin/magic-link:
             post:
               x-amazon-apigateway-integration:
                 httpMethod: POST
@@ -73,7 +73,7 @@ Resources:
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WaterApiLambda.Arn}/invocations
                 passthroughBehavior: "when_no_match"
               responses: {}
-          /api/1/inventory/admin/hash:
+          /api/1/admin/hash:
             get:
               x-amazon-apigateway-integration:
                 httpMethod: POST
@@ -104,7 +104,7 @@ Resources:
         x-amazon-apigateway-binary-media-types:
           - '*/*'
         paths:
-          /api/1/admin/inventory/item:
+          /api/1/admin/album/post:
             post:
               x-amazon-apigateway-integration:
                 httpMethod: POST
@@ -119,7 +119,7 @@ Resources:
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WaterApiLambda.Arn}/invocations
                 passthroughBehavior: "when_no_match"
               responses: {}
-          /api/1/admin/inventory/items/{id}:
+          /api/1/admin/album/posts/{id}:
             put:
               x-amazon-apigateway-integration:
                 httpMethod: POST
@@ -141,7 +141,7 @@ Resources:
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WaterApiLambda.Arn}/invocations
                 passthroughBehavior: "when_no_match"
               responses: {}
-          /api/1/admin/inventory/s3/urls:
+          /api/1/admin/album/s3/urls:
             get:
               x-amazon-apigateway-integration:
                 httpMethod: POST
@@ -156,7 +156,7 @@ Resources:
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WaterApiLambda.Arn}/invocations
                 passthroughBehavior: "when_no_match"
               responses: {}
-          /api/1/admin/inventory/s3/images:
+          /api/1/admin/album/s3/images:
             delete:
               x-amazon-apigateway-integration:
                 httpMethod: POST
@@ -213,10 +213,10 @@ Resources:
                     "ses:FromAddress": !Join ['', ['{{resolve:ssm:', !FindInMap [Config, !Ref Environment, SesSenderEmailAddress], ":1}}"]]
       Events:
         # Unauthenticted Routes
-        GetItems:
+        GetAlbumPosts:
           Type: Api
           Properties:
-            Path: /api/1/inventory/items
+            Path: /api/1/album/posts
             Method: get
             RestApiId: !Ref WaterApiUnauthenticatedApi
         RequestGraphQL:
@@ -228,44 +228,44 @@ Resources:
         SendAdminMagicLink:
           Type: Api
           Properties:
-            Path: /api/1/inventory/admin/magic-link
+            Path: /api/1/admin/magic-link
             Method: post
             RestApiId: !Ref WaterApiUnauthenticatedApi
         VerifyHash:
           Type: Api
           Properties:
-            Path: /api/1/inventory/admin/hash
+            Path: /api/1/admin/hash
             Method: get
             RestApiId: !Ref WaterApiUnauthenticatedApi
         # Authenticted Routes
-        CreateItem:
+        CreateAlbumPost:
           Type: Api
           Properties:
-            Path: /api/1/admin/inventory/item
+            Path: /api/1/admin/album/post
             Method: post
             RestApiId: !Ref WaterApiAuthenticatedApi
-        UpdateItem:
+        UpdateAlbumPost:
           Type: Api
           Properties:
-            Path: /api/1/admin/inventory/items/{id}
+            Path: /api/1/admin/album/posts/{id}
             Method: put
             RestApiId: !Ref WaterApiAuthenticatedApi
-        DeleteItem:
+        DeleteAlbumPost:
           Type: Api
           Properties:
-            Path: /api/1/admin/inventory/items/{id}
+            Path: /api/1/admin/album/posts/{id}
             Method: delete
             RestApiId: !Ref WaterApiAuthenticatedApi
         GetS3UploadUrl:
           Type: Api
           Properties:
-            Path: /api/1/admin/inventory/s3/urls
+            Path: /api/1/admin/album/s3/urls
             Method: get
             RestApiId: !Ref WaterApiAuthenticatedApi
-        DeleteImages:
+        DeleteAlbumImages:
           Type: Api
           Properties:
-            Path: /api/1/admin/inventory/s3/images
+            Path: /api/1/admin/album/s3/images
             Method: delete
             RestApiId: !Ref WaterApiAuthenticatedApi
         DeleteCloudFrontCache:
@@ -280,11 +280,11 @@ Resources:
           AIRCDN_DISTRIBUTION_ID: <AirCdnDistributionId>
           ENVIRONMENT: !Ref Environment 
           GATSBY_WEBHOOK_ID: !Sub "{{resolve:ssm:${GatsbyWebhookId}:1}}"
-          INVENTORY_ITEMS_TABLE: !Ref WaterApiInventoryItemsTable
-          INVENTORY_ADMINS_TABLE: !Ref WaterApiInventoryAdminsTable
+          ALBUM_POSTS_TABLE: !Ref WaterApiAlbumAlbumPostsTable
+          ADMINS_TABLE: !Ref WaterApiAdminsTable
           EARTHBUCKET_MEDIA_BUCKET_NAME: !Sub <Namespace>-${Environment}-earthbucket-media
           SES_SENDER_EMAIL_ADDRESS: !Join ['', ['{{resolve:ssm:', !FindInMap [Config, !Ref Environment, SesSenderEmailAddress], ":1}}"]]
-  WaterApiInventoryItemsTable:
+  WaterApiAlbumAlbumPostsTable:
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -300,8 +300,8 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      TableName: !Sub <Namespace>-${Environment}-WaterApiInventoryItemsTable
-  WaterApiInventoryAdminsTable:
+      TableName: !Sub <Namespace>-${Environment}-WaterApiAlbumAlbumPostsTable
+  WaterApiAdminsTable:
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -317,7 +317,7 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      TableName: !Sub <Namespace>-${Environment}-WaterApiInventoryAdminsTable
+      TableName: !Sub <Namespace>-${Environment}-WaterApiAdminsTable
   WaterApiSESConfigSet:
     Type: AWS::SES::ConfigurationSet
     Properties:
@@ -366,7 +366,7 @@ Resources:
 Outputs:
   WaterApiAdminsTableUrl:
     Description: The Admins Table authorizes which users can authenticate with WaterApi.
-    Value: !Sub "https://console.aws.amazon.com/dynamodb/home?region=${AWS::Region}#tables:selected=${WaterApiInventoryAdminsTable};tab=items"
+    Value: !Sub "https://console.aws.amazon.com/dynamodb/home?region=${AWS::Region}#tables:selected=${WaterApiAdminsTable};tab=items"
   WaterApiUnauthenticatedApiUrl:
     Description: API Gateway Url
     Value: !Sub ${WaterApiUnauthenticatedApi}.execute-api.${AWS::Region}.amazonaws.com

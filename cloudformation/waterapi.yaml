@@ -280,11 +280,11 @@ Resources:
           AIRCDN_DISTRIBUTION_ID: <AirCdnDistributionId>
           ENVIRONMENT: !Ref Environment 
           GATSBY_WEBHOOK_ID: !Sub "{{resolve:ssm:${GatsbyWebhookId}:1}}"
-          ALBUM_POSTS_TABLE: !Ref WaterApiAlbumAlbumPostsTable
+          ALBUM_POSTS_TABLE: !Ref WaterApiAlbumPostsTable
           ADMINS_TABLE: !Ref WaterApiAdminsTable
           EARTHBUCKET_MEDIA_BUCKET_NAME: !Sub <Namespace>-${Environment}-earthbucket-media
           SES_SENDER_EMAIL_ADDRESS: !Join ['', ['{{resolve:ssm:', !FindInMap [Config, !Ref Environment, SesSenderEmailAddress], ":1}}"]]
-  WaterApiAlbumAlbumPostsTable:
+  WaterApiAlbumPostsTable:
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -300,7 +300,7 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      TableName: !Sub <Namespace>-${Environment}-WaterApiAlbumAlbumPostsTable
+      TableName: !Sub <Namespace>-${Environment}-WaterApiAlbumPostsTable
   WaterApiAdminsTable:
     Type: AWS::DynamoDB::Table
     Properties:

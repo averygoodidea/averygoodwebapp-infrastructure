@@ -102,7 +102,9 @@ npm install
 ```
 cd ./averygoodwebapp-infrastructure
 cp .env.production.example .env.production
+
 17. Open the .env.production file in your editor of choice, and update its variables file with the appropriate values
+
 | variable                     | value                                           | description                                                                                                                                                                                                   |
 |------------------------------|-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | AWS_ACCESS_KEY_ID            | `<awsAccessKeyId>`                              | this value can be found by running the following command `sudo nano ~/.aws/credentials`. You can find it under the aws profile you have been using for this installation guide.                               |

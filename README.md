@@ -15,20 +15,25 @@ The Infrastructure for A Very Good Web App declares an AWS cloud evironment "sta
 3. Clone your forked version of this repo, ie:
 `git clone git@github.com:<mygithubaccount>/averygoodwebapp-infrastructure.git`
 4. Inside the repo, make a copy of the .env.example file
+
 ```
 cd ./averygoodwebapp-infrastructure
 cp .env.example .env
 ```
+
 5. Open the .env file in your editor of choice, and update its variables file with the appropriate values
+
 | variable           | value                | description                                                                                                                                                                                                                                               |
 |--------------------|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | AWS_WATERAPI_EMAIL | `<awsWaterApiEmail>` | an admin email for your project                                                                                                                                                                                                                           |
 | DOMAIN_NAME        | `<domainName>`       | this project's domain name                                                                                                                                                                                                                                |
 | CACHE_HASH         | `<cacheHash>`        | a work-around to enable a stack to be deployed while a previous Lambda@Edge function deletes. Generate string from random.org, and only update it if CloudFormation throws an error that it cannot delete EarthBucketBasicAuthLambdaEdge.                 |
 | GATSBY_WEBHOOK_ID  | `<gatsbyWebhookId>`  | the string that connects the infrastructure to Gatsby Cloud. You can copy and paste this value from gatsbyjs.com/dashboard/ > View Details > Site Settings > Webhook. Under "Preview Webhook", copy and paste only the hash string at the end of the url. |
+
 6. Initialize your Global Stack
 `sh ./init.sh <awsProfile>`
 7. Follow the Prompts that appear in the terminal window:
+
 ```
 ------------------
 Step 1 of 2 (AWS Route 53)
@@ -41,23 +46,31 @@ Click '$DOMAIN_NAME' > 'Create Record in Route 53' for each pending validation h
 https://console.aws.amazon.com/acm/home?region=us-east-1#/
 ------------------
 ```
+
 8. Deploy your Production Environment Stack
 `sh ./deploy.sh prod <awsProfile>`
 9. In the parent directory of averygoodwebapp-infrastructure, clone your forked version of the WaterApi repo, ie:
+
 ```
 cd ../
 git clone git@github.com:<mygithubaccount>/averygoodwebapp-waterapi.git
 ```
+
 10. Install the node packages inside of the WaterApi repo.
+
 ```
 cd ./averygoodwebapp-waterapi
 npm install
+
 ```
+
 11. Make a copy of the .env.production.example file
+
 ```
 cd ./averygoodwebapp-infrastructure
 cp .env.production.example .env.production
 ```
+
 12. Open the .env.production file in your editor of choice, and update its variables file with the appropriate values
 | variable           | value                  | description                                                                                                                                                                                                          |
 |--------------------|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -65,18 +78,25 @@ cp .env.production.example .env.production
 | DOMAIN_NAME        | `<domainName>`         | this project's domain name                                                                                                                                                                                           |
 | AWS_WATERAPI_KEY   | `<prodAwsWterApiKey>`  | the water api key which you can copy and paste from: https://console.aws.amazon.com/cloudformation/home `<domainNamespace>`-prod-stack > Outputs. Copy the "apikey" generated from the url located at awsWaterApiKey |
 13. Initialize the WaterApi codebase
+
 `sh ./init.sh prod <awsProfile>`
+
 14. In the parent directory of averygoodwebapp-infrastructure, clone your forked version of the EarthBucket repo, ie:
+
 ```
 cd ../
 git clone git@github.com:<mygithubaccount>/averygoodwebapp-earthbucket.git
 ```
+
 15. Install the node packages inside of the EarthBucket repo.
+
 ```
 cd ./averygoodwebapp-earthbucket
 npm install
 ```
+
 16. Make a copy of the .env.production.example file
+
 ```
 cd ./averygoodwebapp-infrastructure
 cp .env.production.example .env.production
@@ -93,7 +113,9 @@ cp .env.production.example .env.production
 | GATSBY_WATERAPI_KEY          | `<prodAwsWaterApiKey>`                          | the water api key which you can copy and paste from: https://console.aws.amazon.com/cloudformation/home ``-prod-stack > Outputs. Copy the "apikey" generated from the url located at awsWaterApiKey           |
 | VALINE_LEANCLOUD_APP_ID      | `<valineLeanCloudAppId>`                        | this value can be copied and pasted from https://console.leancloud.app/applist.html#/apps > `<appTitle>` > Settings > App keys. Copy the value from AppID.                                                    |
 | VALINE_LEANCLOUD_APP_KEY     | `<valineLeanCloudAppKey>`                       | this value can be copied and pasted from https://console.leancloud.app/applist.html#/apps > `<appTitle>` > Settings > App keys. Copy the value from AppKey.                                                   |
+
 18. Initialize the EarthBucket codebase
+
 `sh ./init.sh prod <awsProfile>`
 
 These stacks are provisioned using [AWS CloudFormation](https://aws.amazon.com/cloudformation/).

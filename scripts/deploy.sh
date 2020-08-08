@@ -25,8 +25,8 @@ else
   # Global
   # - fragments for account-wide exported output value names
   NAMESPACE=$(sed -e "s,\.,-," <<< $DOMAIN_NAME)
-  GLOBAL_TLS_CERTIFICATE_ARN_FRAGMENT="global-${NAMESPACE}-TLSCertificateArn"
-  GLOBAL_HOSTEDZONE_FRAGMENT="global-${NAMESPACE}-HostedZoneId"
+  GLOBAL_TLS_CERTIFICATE_ARN_FRAGMENT="${NAMESPACE}-global-TLSCertificateArn"
+  GLOBAL_HOSTEDZONE_FRAGMENT="${NAMESPACE}-global-HostedZoneId"
 
   if [ $ENVIRONMENT = 'global' ] ; then
     echo "------------------"

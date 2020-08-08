@@ -72,11 +72,13 @@ cp .env.production.example .env.production
 ```
 
 12. Open the .env.production file in your editor of choice, and update its variables file with the appropriate values
+
 | variable           | value                  | description                                                                                                                                                                                                          |
 |--------------------|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | AWS_WATERAPI_EMAIL | `<awsWaterApiEmail>`   | an admin email for your project                                                                                                                                                                                      |
 | DOMAIN_NAME        | `<domainName>`         | this project's domain name                                                                                                                                                                                           |
 | AWS_WATERAPI_KEY   | `<prodAwsWterApiKey>`  | the water api key which you can copy and paste from: https://console.aws.amazon.com/cloudformation/home `<domainNamespace>`-prod-stack > Outputs. Copy the "apikey" generated from the url located at awsWaterApiKey |
+
 13. Initialize the WaterApi codebase
 
 `sh ./init.sh prod <awsProfile>`

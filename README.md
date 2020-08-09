@@ -161,7 +161,7 @@ Go to https://www.gatsbyjs.com/dashboard > Deploys
 
 Click Trigger build.
 
-21. Confirm your deployment has been successful by visiting your domain name.
+21. Once the build has completed running, confirm your deployment has been successful by visiting your domain name.
 
 # CloudFormation Stack Info
 

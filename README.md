@@ -21,7 +21,7 @@ More info can be found at https://averygoodweb.app.
 1. Fork this repo, the [EarthBucket](https://github.com/averygoodidea/averygoodwebapp-earthbucket) repo, and the [WaterApi](https://github.com/averygoodidea/averygoodwebapp-waterapi) repo.
 2. On gatsbyjs.com, connect your forked earthbucket repo master branch to gatsby cloud.
 3. Clone your forked version of this repo, ie:
-`git clone git@github.com:<mygithubaccount>/averygoodwebapp-infrastructure.git`
+`git clone git@github.com:<mygithubusername>/averygoodwebapp-infrastructure.git`
 4. Inside the repo, make a copy of the .env.example file
 
 ```
@@ -61,7 +61,7 @@ https://console.aws.amazon.com/acm/home?region=us-east-1#/
 
 ```
 cd ../
-git clone git@github.com:<mygithubaccount>/averygoodwebapp-waterapi.git
+git clone git@github.com:<mygithubusername>/averygoodwebapp-waterapi.git
 ```
 
 10. Install the node packages inside of the WaterApi repo.
@@ -95,7 +95,7 @@ cp .env.production.example .env.production
 
 ```
 cd ../
-git clone git@github.com:<mygithubaccount>/averygoodwebapp-earthbucket.git
+git clone git@github.com:<mygithubusername>/averygoodwebapp-earthbucket.git
 ```
 
 15. Install the node packages inside of the EarthBucket repo.

@@ -18,7 +18,7 @@ More info can be found at https://averygoodweb.app.
 
 ## Installation Instructions
 
-1. Fork this repo, the EarthBucket repo, and the WaterApi repo.
+1. Fork this repo, the [EarthBucket](https://github.com/averygoodidea/averygoodwebapp-earthbucket) repo, and the [WaterApi](https://github.com/averygoodidea/averygoodwebapp-waterapi) repo.
 2. On gatsbyjs.com, connect your forked earthbucket repo master branch to gatsby cloud.
 3. Clone your forked version of this repo, ie:
 `git clone git@github.com:<mygithubaccount>/averygoodwebapp-infrastructure.git`

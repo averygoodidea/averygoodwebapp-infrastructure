@@ -16,6 +16,24 @@ Here is a diagram of what the infrastructure looks like:
 
 More info can be found at https://averygoodweb.app.
 
+## CloudFormation Stack Info
+
+These stacks are provisioned using [AWS CloudFormation](https://aws.amazon.com/cloudformation/).
+
+The CloudFormation templates are located in the [cloudformation](cloudformation/) directory.
+
+The templates have codenames which represent the "elements" of the infrastructure. The names are:
+
+| stack       | template                                                             | description                                                                                                 |
+|-------------|----------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| Global      | [cloudformation/global.yaml](./cloudformation/global.yaml)           | The *Global* Stack that creates the web app's Domain Name to Hosted Zone Id and TLS Certificate connection. |
+| Environment | [cloudformation/environment.yaml](./cloudformation/environment.yaml) | The *Parent* Stack that handles all updates between child stacks.                                           |
+| FireRecord  | [cloudformation/firerecord.yaml](./cloudformation/firerecord.yaml)   | The *Child* Stack that maps the Hosted Zone Id and A Records to the CDN.                                    |
+| AirCdn      | [cloudformation/aircdn.yaml](./cloudformation/aircdn.yaml)           | The *Child* Stack that contains the application CDN.                                                        |
+| EarthBucket | [cloudformation/earthbucket.yaml](./cloudformation/earthbucket.yaml) | The *Child* Stack that holds the front-end ui.                                                              |
+| WaterApi    | [cloudformation/waterapi.yaml](./cloudformation/waterapi.yaml)       | The *Child* Stack that holds the backend api.                                                               |
+
+
 ## Installation Instructions
 
 1. Fork this repo, the [EarthBucket](https://github.com/averygoodidea/averygoodwebapp-earthbucket) repo, and the [WaterApi](https://github.com/averygoodidea/averygoodwebapp-waterapi) repo.
@@ -163,24 +181,7 @@ Click Trigger build.
 
 21. Once the build has completed running, confirm your deployment has been successful by visiting your domain name.
 
-# CloudFormation Stack Info
-
-These stacks are provisioned using [AWS CloudFormation](https://aws.amazon.com/cloudformation/).
-
-The CloudFormation templates are located in the [cloudformation](cloudformation/) directory.
-
-The templates have codenames which represent the "elements" of the infrastructure. The names are:
-
-| stack       | template                                                             | description                                                                                                 |
-|-------------|----------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| Global      | [cloudformation/global.yaml](./cloudformation/global.yaml)           | The *Global* Stack that creates the web app's Domain Name to Hosted Zone Id and TLS Certificate connection. |
-| Environment | [cloudformation/environment.yaml](./cloudformation/environment.yaml) | The *Parent* Stack that handles all updates between child stacks.                                           |
-| FireRecord  | [cloudformation/firerecord.yaml](./cloudformation/firerecord.yaml)   | The *Child* Stack that maps the Hosted Zone Id and A Records to the CDN.                                    |
-| AirCdn      | [cloudformation/aircdn.yaml](./cloudformation/aircdn.yaml)           | The *Child* Stack that contains the application CDN.                                                        |
-| EarthBucket | [cloudformation/earthbucket.yaml](./cloudformation/earthbucket.yaml) | The *Child* Stack that holds the front-end ui.                                                              |
-| WaterApi    | [cloudformation/waterapi.yaml](./cloudformation/waterapi.yaml)       | The *Child* Stack that holds the backend api.                                                               |
-
-## Deployment
+## Continuous Deployment
 
 Please note, a minimum of two environments have to be deployed, in the following order:
 

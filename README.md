@@ -8,7 +8,7 @@ Prerequisites
 
 The Infrastructure for A Very Good Web App declares an AWS cloud evironment "stack" that hosts your web app (or website).
 
-## AWS CloudFormation Diagram
+## Cloud Diagram
 
 Here is a diagram of what the infrastructure looks like:
 

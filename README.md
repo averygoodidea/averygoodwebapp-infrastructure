@@ -183,7 +183,7 @@ Click Trigger build.
 
 22. Once the build has completed running, confirm your deployment has been successful by visiting your domain name.
 
-The installation is complete! Feel free to modify to create your own app or website!
+The installation is complete! Feel free to modify to create your own web app or website!
 
 > If you have any issues following this guide just send me an email at avery-at-averygoodidea-dot-com and I'll help you troubleshoot any issues.
 

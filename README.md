@@ -169,9 +169,11 @@ Access Key ID = `<awsAccessKeyId>`
 Secret Access Key = `<awsSecretAccessKey>`
 Bucket = `<namespace>`-`<environment>`-earthbucket-app
 
-20. Initialize the EarthBucket codebase
+20. Initialize the EarthBucket codebase with the prod environment
 
-`sh ./init.sh prod <awsProfile>`
+```
+sh ./init.sh prod <awsProfile>
+```
 
 21. Deploy the initial build to your domain.
 
@@ -185,10 +187,10 @@ Click Trigger build.
 
 Please note, a minimum of two environments have to be deployed, in the following order:
 
-1. `<domainname-prefix>-global-stack`
-2. `<domainname-prefix>-<environment-a>-stack`
-3. `<domainname-prefix>-<environment-b>-stack`[Optional]
-4. `<domainname-prefix>-<environment-c>-stack`[Optional]
+1. `<domainNamespace>-global-stack`
+2. `<domainNamespace>-prod-stack`
+3. `<domainNamespace>-<environmentA>-stack`[Optional]
+4. `<domainNamespace>-<environmentB>-stack`[Optional]
 etc...
 
 **All non-production environments are secured with a Basic Authenticaion Request Header.**

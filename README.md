@@ -165,9 +165,11 @@ Under AWS, click Connect.
 
 Add in the following values:
 
-Access Key ID = `<awsAccessKeyId>`
-Secret Access Key = `<awsSecretAccessKey>`
-Bucket = `<namespace>`-`<environment>`-earthbucket-app
+| name              | value                                               |
+|-------------------|-----------------------------------------------------|
+| Access Key ID     | `<awsAccessKeyId>`                                  |
+| Secret Access Key | `<awsSecretAccessKey>`                              |
+| Bucket            | `<domainNamespace>`-`<environment>`-earthbucket-app |
 
 20. Initialize the EarthBucket codebase with the prod environment
 

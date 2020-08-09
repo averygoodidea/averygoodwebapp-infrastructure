@@ -123,6 +123,10 @@ cp .env.production.example .env.production
 
 `sh ./init.sh prod <awsProfile>`
 
+19. Confirm your installation has been successful by visiting your domain name.
+
+# CloudFormation Stack Info
+
 These stacks are provisioned using [AWS CloudFormation](https://aws.amazon.com/cloudformation/).
 
 The CloudFormation templates are located in the [cloudformation](cloudformation/) directory.
@@ -142,7 +146,8 @@ The templates have codenames which represent the "elements" of the infrastructur
 
 Here is a diagram of what the infrastructure looks like:
 
-![FaithInventory Infrastructure Diagram](https://user-images.githubusercontent.com/261457/85934229-40d8ed00-b8ae-11ea-9348-8a5d55108fa1.png)
+![A Very Good Web App Infrastructure Diagram](./averygoodwebapp-resource-map.svg)
+<img src="./averygoodwebapp-resource-map.svg">
 
 ## Deployment
 

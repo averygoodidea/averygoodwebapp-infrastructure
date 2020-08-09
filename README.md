@@ -8,6 +8,12 @@ Prerequisites
 
 The Infrastructure for A Very Good Web App declares an AWS cloud evironment "stack" that hosts your web app (or website).
 
+## Diagram
+
+Here is a diagram of what the infrastructure looks like:
+
+![A Very Good Web App Infrastructure Diagram](./averygoodwebapp-resource-map.svg)
+
 ## Installation Instructions
 
 1. Fork this repo, the EarthBucket repo, and the WaterApi repo.
@@ -141,13 +147,6 @@ The templates have codenames which represent the "elements" of the infrastructur
 | AirCdn      | [cloudformation/aircdn.yaml](./cloudformation/aircdn.yaml)           | The *Child* Stack that contains the application CDN.                                                        |
 | EarthBucket | [cloudformation/earthbucket.yaml](./cloudformation/earthbucket.yaml) | The *Child* Stack that holds the front-end ui.                                                              |
 | WaterApi    | [cloudformation/waterapi.yaml](./cloudformation/waterapi.yaml)       | The *Child* Stack that holds the backend api.                                                               |
-
-## Diagram
-
-Here is a diagram of what the infrastructure looks like:
-
-![A Very Good Web App Infrastructure Diagram](./averygoodwebapp-resource-map.svg)
-<img src="./averygoodwebapp-resource-map.svg">
 
 ## Deployment
 

@@ -14,7 +14,7 @@ Here is a diagram of what the infrastructure looks like:
 
 ![A Very Good Web App Infrastructure Diagram](./averygoodwebapp-resource-map.svg)
 
-More info can be found at (https://averygoodweb.app).
+More info can be found at https://averygoodweb.app.
 
 ## Installation Instructions
 

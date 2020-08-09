@@ -127,11 +127,41 @@ cp .env.production.example .env.production
 | VALINE_LEANCLOUD_APP_ID      | `<valineLeanCloudAppId>`                        | this value can be copied and pasted from https://console.leancloud.app/applist.html#/apps > `<appTitle>` > Settings > App keys. Copy the value from AppID.                                                    |
 | VALINE_LEANCLOUD_APP_KEY     | `<valineLeanCloudAppKey>`                       | this value can be copied and pasted from https://console.leancloud.app/applist.html#/apps > `<appTitle>` > Settings > App keys. Copy the value from AppKey.                                                   |
 
-18. Initialize the EarthBucket codebase
+18. Update Gatsby Cloud Environment Variables with the above .env data.
+
+Go to https://www.gatsbyjs.com/dashboard > View details > Site Settings > General > Environment Variables.
+
+Under "Preview environment variables", click Edit > Bulk Add Variables.
+Copy and paste the completed .env.production content into the textarea.
+Click, Add.
+
+Under "Builds environment variables", click Edit > Bulk Add Variables.
+Copy and paste the completed .env.production content into the textarea.
+Click, Add.
+
+19. Connect Gatsby Cloud to AWS S3.
+
+Go to https://www.gatsbyjs.com/dashboard > View details > Site Settings > Integrations > Hosting.
+
+Under AWS, click Connect.
+
+Add in the following values:
+
+Access Key ID = `<awsAccessKeyId>`
+Secret Access Key = `<awsSecretAccessKey>`
+Bucket = `<namespace>`-`<environment>`-earthbucket-app
+
+20. Initialize the EarthBucket codebase
 
 `sh ./init.sh prod <awsProfile>`
 
-19. Confirm your installation has been successful by visiting your domain name.
+21. Deploy the initial build to your domain.
+
+Go to https://www.gatsbyjs.com/dashboard > Deploys
+
+Click Trigger build.
+
+21. Confirm your deployment has been successful by visiting your domain name.
 
 # CloudFormation Stack Info
 

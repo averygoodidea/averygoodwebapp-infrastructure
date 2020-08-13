@@ -153,9 +153,24 @@ Resources:
             QueryString: true
           MinTTL: 0
           MaxTTL: 31536000 #365 days in seconds
+        - PathPattern: '/ui/1/docs*'
+          TargetOriginId: earthbucket-docs
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: true
+          DefaultTTL: 31536000 #365 days in seconds
         Origins:
         - DomainName: !Sub "<Namespace>-${Environment}-earthbucket-app.s3-website-${AWS::Region}.amazonaws.com"
           Id: earthbucket
+          CustomOriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: http-only
+          OriginCustomHeaders:
+            - HeaderName: Referer
+              HeaderValue: !Sub "https://${DomainName}/"
+        - DomainName: !Sub "<Namespace>-${Environment}-earthbucket-docs.s3-website-${AWS::Region}.amazonaws.com"
+          Id: earthbucket-docs
           CustomOriginConfig:
             HTTPPort: '80'
             HTTPSPort: '443'

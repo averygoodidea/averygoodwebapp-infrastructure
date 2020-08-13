@@ -271,6 +271,34 @@ Resources:
               - sqs:GetQueueAttributes
               - sqs:ChangeMessageVisibility
             Resource: !GetAtt EarthBucketSQS.Arn
+  EarthBucketDocsS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: !Sub <Namespace>-${Environment}-earthbucket-docs
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+  EarthBucketDocsS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref EarthBucketDocsS3Bucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Sid: AddPerm
+          Effect: Allow
+          Principal: '*'
+          Action:
+          - s3:GetObject
+          - s3:PutObject
+          Resource:
+          - !Sub "arn:aws:s3:::<Namespace>-${Environment}-earthbucket-docs/*"
+          Condition:
+            StringLike:
+              aws:Referer:
+                # S3 will give a 403 on it's bucket endpoints. It will only return a 200 AirCdn passes in this designated url.
+                - !Sub "https://${DomainName}/*"
 Outputs:
   EarthBucketAppS3BucketName:
     Value: !Ref EarthBucketAppS3Bucket

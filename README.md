@@ -57,7 +57,7 @@ cp .env.example .env
 | GATSBY_WEBHOOK_ID  | `<gatsbyWebhookId>`  | the string that connects the infrastructure to Gatsby Cloud. You can copy and paste this value from gatsbyjs.com/dashboard/ > View Details > Site Settings > Webhook. Under "Preview Webhook", copy and paste only the hash string at the end of the url. |
 
 6. Initialize your Global Stack
-`sh ./init.sh <awsProfile>`
+`sh ./scripts/init.sh <awsProfile>`
 7. Follow the Prompts that appear in the terminal window:
 
 ```
@@ -107,7 +107,7 @@ cp .env.production.example .env.production
 
 13. Initialize the WaterApi codebase
 
-`sh ./init.sh prod <awsProfile>`
+`sh ./scripts/init.sh prod <awsProfile>`
 
 14. In the parent directory of averygoodwebapp-infrastructure, clone your forked version of the EarthBucket repo, ie:
 
@@ -174,7 +174,7 @@ Add in the following values:
 20. Initialize the EarthBucket codebase with the prod environment
 
 ```
-sh ./init.sh prod <awsProfile>
+sh ./scripts/init.sh prod <awsProfile>
 ```
 
 21. Deploy the initial build to your domain.

@@ -93,7 +93,7 @@ npm install
 11. Make a copy of the .env.production.example file
 
 ```
-cd ./averygoodwebapp-infrastructure
+cd ./averygoodwebapp-waterapi
 cp .env.production.example .env.production
 ```
 
@@ -126,7 +126,7 @@ npm install
 16. Make a copy of the .env.production.example file
 
 ```
-cd ./averygoodwebapp-infrastructure
+cd ./averygoodwebapp-earthbucket
 cp .env.production.example .env.production
 ```
 

@@ -28,7 +28,7 @@ exports.handler = (event, context, callback) => {
           ExpressionAttributeValues: {
               ':partitionKey': 'published'
           },
-          TableName: `averygoodweb-app-${environment}-EarthBucketBasicAuthTable`
+          TableName: `<Namespace>-${environment}-EarthBucketBasicAuthTable`
       }
       console.log('E', params)
       try {

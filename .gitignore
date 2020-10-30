@@ -10,3 +10,6 @@ cloudformation/global.template.yaml
 cloudformation/waterapi.template.yaml
 cloudformation/waterapi-apikeys.template.yaml
 .env
+*/.terraform
+*/*.tfvars
+*/*.tfstate

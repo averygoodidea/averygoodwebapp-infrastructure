@@ -1,13 +1,3 @@
-variable "firerecord_zone" {
-    type = string
-    default = "blah"
-}
-
-variable "region" {
-    type = string
-    default = "us-east-1"
-}
-
 variable "namespace" {
     type = string
     default = "averygoodwebapp"
@@ -16,6 +6,11 @@ variable "namespace" {
 variable "environment" {
     type = string
     default = "dev"
+}
+
+variable "region" {
+    type = string
+    default = "us-east-1"
 }
 
 variable "domain_name" {

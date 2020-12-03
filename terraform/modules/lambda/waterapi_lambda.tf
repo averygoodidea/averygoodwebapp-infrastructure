@@ -27,7 +27,8 @@ data "archive_file" "waterapi_lambda_file" {
 
 
 resource "aws_lambda_function" "waterapi_lambda_function" {
-  filename      = "tmp/waterapi_lambda.zip"
+  s3_bucket     = "averygoodweb-app-dev-waterapi-api"
+  s3_key        = "lambda.zip"
   function_name = "${var.namespace}-${var.environment}-waterapi_lambda_role"
   role          = aws_iam_role.waterapi_lambda_role.arn
   handler       = "index.handler"
@@ -35,7 +36,7 @@ resource "aws_lambda_function" "waterapi_lambda_function" {
   # The filebase64sha256() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
   # source_code_hash = "${base64sha256(file("lambda_function_payload.zip"))}"
-  source_code_hash = data.archive_file.waterapi_lambda_file.output_base64sha256
+  # source_code_hash = data.archive_file.waterapi_lambda_file.output_base64sha256
 
   runtime = "nodejs12.x"
 

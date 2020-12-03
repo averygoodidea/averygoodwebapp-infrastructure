@@ -1,6 +1,6 @@
 variable "firerecord_zone" {
     type = string
-    default = "blah"
+    default = "averygoodweb.app"
 }
 
 variable "region" {
@@ -20,5 +20,5 @@ variable "environment" {
 
 variable "domain_name" {
     type = string
-    default = "averygoodweb.app"
+    default = "test.averygoodweb.app"
 }

@@ -17,4 +17,4 @@ variable "domain_name" {}
 
 variable "waterapi_lambda_arn" {}
 
-# variable "certificate_arn" {}
+variable "certificate_arn" {}

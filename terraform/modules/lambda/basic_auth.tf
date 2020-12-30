@@ -1,4 +1,7 @@
-resource "random_uuid" "basic_auth" {}
+resource "random_string" "basic_auth" {
+  length  = 4
+  special = false
+}
 
 data "archive_file" "basic_auth" {
   type        = "zip"
@@ -8,14 +11,14 @@ data "archive_file" "basic_auth" {
 }
 
 resource "aws_lambda_function" "basic_auth" {
-  filename = data.archive_file.basic_auth.output_path
+  filename         = data.archive_file.basic_auth.output_path
   source_code_hash = filebase64sha256(data.archive_file.basic_auth.output_path)
-  function_name = "${var.namespace}-${var.environment}-EarthBucketBasicAuthLambdaEdge"
-  role          = aws_iam_role.basic_auth.arn
-  handler       = "index.handler"
-  memory_size = 128
-  timeout      = 5
-  runtime = "nodejs10.x"
+  function_name    = "${var.namespace}-${var.environment}-LambdaEdge-${random_string.basic_auth.result}"
+  role             = aws_iam_role.basic_auth.arn
+  handler          = "index.handler"
+  memory_size      = 128
+  timeout          = 5
+  runtime          = "nodejs10.x"
 }
 
 resource "aws_lambda_alias" "basic_auth" {

@@ -6,8 +6,6 @@ variable "region" {}
 
 variable "domain_name" {}
 
-variable "redirect_domain_name" {}
-
 variable "lambda_edge_function" {}
 
 variable "certificate_arn" {}

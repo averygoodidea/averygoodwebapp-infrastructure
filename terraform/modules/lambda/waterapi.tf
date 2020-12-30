@@ -24,7 +24,7 @@ resource "aws_lambda_function" "waterapi" {
   function_name = "${var.namespace}-${var.environment}-waterapi"
   role          = aws_iam_role.waterapi.arn
   handler       = "index.handler"
-  runtime = "nodejs12.x"
+  runtime       = "nodejs12.x"
 
   environment {
     variables = {

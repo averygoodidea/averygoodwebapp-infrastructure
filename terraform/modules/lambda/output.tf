@@ -13,3 +13,7 @@ output "cache_invalidation_lambda_function_arn" {
 output "cache_invalidation_lambda_function_invoke_arn" {
   value = aws_lambda_function.cache_invalidation.invoke_arn
 }
+
+output "basic_auth_lambda_function_arn" {
+  value = aws_lambda_function.basic_auth.arn
+}

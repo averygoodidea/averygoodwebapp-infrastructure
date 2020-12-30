@@ -1,6 +1,11 @@
 resource "aws_acm_certificate" "firerecord" {
-  domain_name       = var.domain_name
-  validation_method = "DNS"
+  domain_name               = var.domain_name
+  subject_alternative_names = ["*.${var.domain_name}"]
+  validation_method         = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 data "aws_route53_zone" "firerecord" {
   name         = var.firerecord_zone
@@ -28,27 +33,3 @@ resource "aws_acm_certificate_validation" "firerecord" {
   certificate_arn         = aws_acm_certificate.firerecord.arn
   validation_record_fqdns = [for record in aws_route53_record.dns_challlenge : record.fqdn]
 }
-
-# resource "aws_route53_record" "firerecord_alias" {
-#   zone_id = data.aws_route53_zone.firerecord.zone_id
-#   name    = var.domain_name
-#   type    = "A"
-
-#   alias {
-#     name                   = var.aircdn_redirect_domain_name
-#     zone_id                = var.aircdn_hosted_zone
-#     evaluate_target_health = true
-#   }
-# }
-
-# resource "aws_route53_record" "firerecord_alias_redirect" {
-#   zone_id = data.aws_route53_zone.firerecord_zone.zone_id
-#   name    = var.domain_name_redirect
-#   type    = "A"
-
-#   alias {
-#     name                   = var.aircdn_redirect_domain_name
-#     zone_id                = var.aircdn_hosted_zone
-#     evaluate_target_health = true
-#   }
-# }

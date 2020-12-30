@@ -22,8 +22,3 @@ variable "domain_name" {
   type    = string
   default = "test.averygoodweb.app"
 }
-
-variable "redirect_domain_name" {
-  type = string
-  default = "www.test.averygoodweb.app"
-}

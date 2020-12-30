@@ -4,14 +4,6 @@ variable "aircdn_hosted_zone" {
   description = ""
 }
 
-# variable "aircdn_redirect_domain_name" {
-#     type = string
-# }
-
-# variable "aircdn_domain_name" {
-#     type = string
-# }
-
 variable "firerecord_zone" {
   type = string
 }
@@ -19,7 +11,3 @@ variable "firerecord_zone" {
 variable "domain_name" {
   type = string
 }
-
-# variable "domain_name_redirect" {
-#     type = string
-# }

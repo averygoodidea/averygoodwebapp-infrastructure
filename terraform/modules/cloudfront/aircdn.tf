@@ -1,8 +1,8 @@
 resource "aws_cloudfront_distribution" "aircdn" {
-  enabled = true
-  comment = "${var.namespace} ${var.environment} AirCdn for EarthBucket site and WaterApi api"
+  enabled             = true
+  comment             = "${var.namespace} ${var.environment} AirCdn for EarthBucket site and WaterApi api"
   default_root_object = "index.html"
-  aliases = [ var.domain_name ]
+  aliases             = [var.domain_name]
 
   origin {
     domain_name = "${var.namespace}-${var.environment}-earthbucket-app.s3-website-${var.region}.amazonaws.com"
@@ -11,7 +11,7 @@ resource "aws_cloudfront_distribution" "aircdn" {
       http_port              = 80
       https_port             = 443
       origin_protocol_policy = "http-only"
-      origin_ssl_protocols = ["TLSv1.2"]
+      origin_ssl_protocols   = ["TLSv1.2"]
     }
     custom_header {
       name  = "Referer"
@@ -26,7 +26,7 @@ resource "aws_cloudfront_distribution" "aircdn" {
       http_port              = 80
       https_port             = 443
       origin_protocol_policy = "http-only"
-      origin_ssl_protocols = ["TLSv1.2"]
+      origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
 
@@ -37,7 +37,7 @@ resource "aws_cloudfront_distribution" "aircdn" {
       http_port              = 80
       https_port             = 443
       origin_protocol_policy = "http-only"
-      origin_ssl_protocols = ["TLSv1.2"]
+      origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
 
@@ -131,7 +131,7 @@ resource "aws_cloudfront_distribution" "aircdn" {
 
   # Cache behavior with precedence 4
   ordered_cache_behavior {
-    path_pattern = "/api/1/docs*"
+    path_pattern     = "/api/1/docs*"
     target_origin_id = "earthbucket-docs"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
@@ -144,16 +144,16 @@ resource "aws_cloudfront_distribution" "aircdn" {
       }
     }
 
-    default_ttl = 31536000
+    default_ttl            = 31536000
     viewer_protocol_policy = "redirect-to-https"
   }
 
   default_cache_behavior {
-    target_origin_id = "earthbucket"
+    target_origin_id       = "earthbucket"
     viewer_protocol_policy = "redirect-to-https"
-    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    compress = true
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods         = ["GET", "HEAD", "OPTIONS"]
+    compress               = true
 
     default_ttl = 31536000 #365 days in seconds
 
@@ -167,8 +167,8 @@ resource "aws_cloudfront_distribution" "aircdn" {
   }
 
   viewer_certificate {
-      acm_certificate_arn = var.certificate_arn
-      ssl_support_method = "sni-only"
+    acm_certificate_arn = var.certificate_arn
+    ssl_support_method  = "sni-only"
   }
 
   restrictions {
@@ -176,4 +176,5 @@ resource "aws_cloudfront_distribution" "aircdn" {
       restriction_type = "none"
     }
   }
+  retain_on_delete = true
 }

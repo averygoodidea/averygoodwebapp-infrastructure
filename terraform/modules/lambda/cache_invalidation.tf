@@ -11,27 +11,26 @@ data "archive_file" "cache_invalidation" {
 }
 
 resource "aws_lambda_function" "cache_invalidation" {
-  filename = data.archive_file.cache_invalidation.output_path
+  filename         = data.archive_file.cache_invalidation.output_path
   source_code_hash = filebase64sha256(data.archive_file.cache_invalidation.output_path)
-  function_name = "${var.namespace}-${var.environment}-EarthBucketCacheInvalidator"
-  role          = aws_iam_role.cache_invalidation.arn
-  handler       = "index.handler"
-  memory_size = 120
-  timeout      = 20
-  runtime = "nodejs12.x"
+  function_name    = "${var.namespace}-${var.environment}-EarthBucketCacheInvalidator"
+  role             = aws_iam_role.cache_invalidation.arn
+  handler          = "index.handler"
+  memory_size      = 128
+  timeout          = 20
+  runtime          = "nodejs12.x"
   environment {
     variables = {
       "AIRCDN_DISTRIBUTION_ID" = data.aws_cloudfront_distribution.cache_invalidation.id
-      "QUEUE_URL" = var.queue_url,
-      "REGION" = var.region
+      "QUEUE_URL"              = var.queue_url,
+      "REGION"                 = var.region
     }
-
   }
 }
 
 resource "aws_lambda_event_source_mapping" "cache_invalidation" {
   event_source_arn = var.queue_arn
-  batch_size = 10
+  batch_size       = 10
   function_name    = aws_lambda_function.cache_invalidation.arn
 }
 

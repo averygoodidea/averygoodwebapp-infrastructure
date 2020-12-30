@@ -30,13 +30,23 @@ resource "aws_s3_bucket_policy" "app" {
   "Id": "Application static site bucket policy",
   "Statement": [
     {
-      "Sid": "AddPerm",
+      "Sid": "AddS3Perm",
       "Effect": "Allow",
-      "Principal": "*",
-      "Action": ["s3:GetObject", "s3:PutObject"],
-      "Resource": "${aws_s3_bucket.app.arn}/*",
+      "Principal": {
+        "Service": "s3.amazonaws.com"
+      },
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.app.arn}",
+        "${aws_s3_bucket.app.arn}/*"
+      ],
       "Condition": {
-         "StringLike": {"aws:Referer": "https://${var.domain_name}"}
+          "StringLike": {
+              "aws:Referer": "https://${var.domain_name}"
+          }
       }
     }
   ]

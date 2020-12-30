@@ -9,14 +9,13 @@ resource "aws_api_gateway_stage" "waterapi_unauthenticated_api_stage" {
   deployment_id = aws_api_gateway_deployment.waterapi_unauthenticated_api_deployment.id
 }
 
-# data "aws_acm_certificate" "waterapi_acm_certificate" {
-#   domain   = var.domain_name
-#   statuses = ["ISSUED"]
-# }
-
 resource "aws_api_gateway_domain_name" "waterapi_unauthenticated_api_domain" {
-  certificate_arn = var.certificate_arn
-  domain_name     = var.domain_name
+  regional_certificate_arn = var.certificate_arn
+  domain_name              = var.domain_name
+
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
 
 resource "aws_api_gateway_base_path_mapping" "waterapi_unauthenticated_api_mapping" {

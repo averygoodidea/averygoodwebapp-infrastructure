@@ -1,5 +1,5 @@
 resource "aws_api_gateway_rest_api" "waterapi_unauthenticated_api" {
-  name        = "${var.namespace}-${var.environment}-WaterApiUnauthenticatedApi"
+  name               = "${var.namespace}-${var.environment}-WaterApiUnauthenticatedApi"
   binary_media_types = ["*/*"]
 }
 
@@ -76,23 +76,23 @@ resource "aws_api_gateway_method" "posts_options_method" {
 ################
 
 resource "aws_api_gateway_integration" "posts_get_integration" {
-  rest_api_id          = aws_api_gateway_rest_api.waterapi_unauthenticated_api.id
-  resource_id          = aws_api_gateway_resource.posts.id
-  http_method          = aws_api_gateway_method.posts_get_method.http_method
+  rest_api_id             = aws_api_gateway_rest_api.waterapi_unauthenticated_api.id
+  resource_id             = aws_api_gateway_resource.posts.id
+  http_method             = aws_api_gateway_method.posts_get_method.http_method
   integration_http_method = "POST"
-  type                 = "AWS_PROXY"
-  uri                  = var.waterapi_lambda_arn
-  passthrough_behavior = "WHEN_NO_MATCH"
+  type                    = "AWS_PROXY"
+  uri                     = var.waterapi_lambda_arn
+  passthrough_behavior    = "WHEN_NO_MATCH"
 }
 
 resource "aws_api_gateway_integration" "posts_options_integration" {
-  rest_api_id          = aws_api_gateway_rest_api.waterapi_unauthenticated_api.id
-  resource_id          = aws_api_gateway_resource.posts.id
-  http_method          = aws_api_gateway_method.posts_options_method.http_method
+  rest_api_id             = aws_api_gateway_rest_api.waterapi_unauthenticated_api.id
+  resource_id             = aws_api_gateway_resource.posts.id
+  http_method             = aws_api_gateway_method.posts_options_method.http_method
   integration_http_method = "POST"
-  type                 = "AWS_PROXY"
-  uri                  = var.waterapi_lambda_arn
-  passthrough_behavior = "WHEN_NO_MATCH"
+  type                    = "AWS_PROXY"
+  uri                     = var.waterapi_lambda_arn
+  passthrough_behavior    = "WHEN_NO_MATCH"
 }
 
 #############

@@ -1,21 +1,55 @@
-module "firerecord" {
-    source = "./modules/firerecord"
+module "cloudfront" {
+  source = "./modules/cloudfront"
 
-    # aircdn_hosted_zone = "blah"
-    # aircdn_redirect_domain_name = module.aircdnstack.aircdnredirect
-    # aircdn_domain_name  = var.aircdn_domain_name
-    firerecord_zone = var.firerecord_zone
-    domain_name = var.domain_name
-    # domain_name_redirect = var.domain_name_redirect
+  domain_name = var.domain_name
+  redirect_domain_name = var.redirect_domain_name
+  namespace   = var.namespace
+  environment = var.environment
+  region      = var.region
+  lambda_edge_function = module.lambda.cache_invalidation_lambda_function_arn
+  certificate_arn     = module.dns.ssl_certificate_arn
 }
 
-module "waterapi_apigw" {
-    source = "./modules/apigw"
-    waterapi_lambda_arn = module.waterapi_lambda.waterapi_lambda_function_invoke_arn
-    certificate_arn = module.firerecord.waterapi_certificate_arn
-    domain_name = var.domain_name
+module "sqs" {
+  source = "./modules/sqs"
+
+  namespace   = var.namespace
+  environment = var.environment
+}
+module "s3" {
+  source = "./modules/s3"
+
+  domain_name = var.domain_name
+  namespace   = var.namespace
+  environment = var.environment
+  queue_arn = module.sqs.sqs_queue_arn
+}
+module "dns" {
+  source = "./modules/dns"
+
+  firerecord_zone = var.firerecord_zone
+  domain_name     = var.domain_name
 }
 
-module "waterapi_lambda" {
-    source = "./modules/lambda"
+module "apigw" {
+  source = "./modules/apigw"
+
+  waterapi_lambda_arn = module.lambda.waterapi_lambda_function_invoke_arn
+  certificate_arn     = module.dns.ssl_certificate_arn
+  namespace           = var.namespace
+  environment         = var.environment
+  domain_name         = var.domain_name
+  region              = var.region
+}
+
+module "lambda" {
+  source = "./modules/lambda"
+
+  namespace   = var.namespace
+  environment = var.environment
+  domain_name = var.domain_name
+  region      = var.region
+  queue_arn = module.sqs.sqs_queue_arn
+  queue_url = module.sqs.sqs_queue_url
+  aircdn_distribution_id = module.cloudfront.aircdn_distribution_id
 }

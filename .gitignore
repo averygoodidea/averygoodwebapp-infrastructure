@@ -11,6 +11,8 @@ cloudformation/waterapi.template.yaml
 cloudformation/waterapi-apikeys.template.yaml
 .env
 */.terraform
+*.hcl
+*.log
 */*.tfvars
 */*.tfstate
 */tmp

@@ -4,8 +4,8 @@ terraform {
 
 #Default Provider
 provider "aws" {
-  region  = var.region
-#   profile = var.profile
+  region = var.region
+  #   profile = var.profile
 
   version = "~> 3.14.1"
 }

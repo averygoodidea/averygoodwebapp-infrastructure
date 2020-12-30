@@ -6,8 +6,8 @@ variable "region" {}
 
 variable "domain_name" {}
 
-variable "queue_arn" {}
+variable "redirect_domain_name" {}
 
-variable "queue_url" {}
+variable "lambda_edge_function" {}
 
-variable "aircdn_distribution_id" {}
+variable "certificate_arn" {}

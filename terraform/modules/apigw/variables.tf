@@ -1,17 +1,8 @@
-variable "namespace" {
-    type = string
-    default = "averygoodwebapp"
-}
+variable "namespace" {}
 
-variable "environment" {
-    type = string
-    default = "dev"
-}
+variable "environment" {}
 
-variable "region" {
-    type = string
-    default = "us-east-1"
-}
+variable "region" {}
 
 variable "domain_name" {}
 

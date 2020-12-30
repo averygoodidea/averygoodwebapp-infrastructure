@@ -1,7 +1,7 @@
 variable "aircdn_hosted_zone" {
-    type = string
-    default = "Z2FDTNDATAQYW2"
-    description = ""
+  type        = string
+  default     = "Z2FDTNDATAQYW2"
+  description = ""
 }
 
 # variable "aircdn_redirect_domain_name" {
@@ -13,11 +13,11 @@ variable "aircdn_hosted_zone" {
 # }
 
 variable "firerecord_zone" {
-    type = string
+  type = string
 }
 
 variable "domain_name" {
-    type = string
+  type = string
 }
 
 # variable "domain_name_redirect" {

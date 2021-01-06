@@ -22,3 +22,12 @@ variable "domain_name" {
   type    = string
   default = "test.averygoodweb.app"
 }
+
+variable "gatsby_webhook_id" {
+  type = string
+}
+
+variable "sender_email_address" {
+  type    = string
+  default = "avery@averygoodidea.com"
+}

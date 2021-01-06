@@ -60,4 +60,23 @@ module "lambda" {
   queue_arn              = module.sqs.sqs_queue_arn
   queue_url              = module.sqs.sqs_queue_url
   aircdn_distribution_id = module.cloudfront.aircdn_distribution_id
+  album_posts_table      = module.dynamodb.album_posts_table
+  admin_table            = module.dynamodb.admin_table
+  gatsby_webhook_id      = var.gatsby_webhook_id
+  sender_email_address   = var.sender_email_address
+}
+
+module "ses" {
+  source = "./modules/ses"
+
+  namespace   = var.namespace
+  environment = var.environment
+}
+
+module "dynamodb" {
+  source = "./modules/dynamodb"
+
+  namespace   = var.namespace
+  environment = var.environment
+  region      = var.region
 }

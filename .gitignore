@@ -16,3 +16,4 @@ cloudformation/waterapi-apikeys.template.yaml
 */*.tfvars
 */*.tfstate
 */tmp
+downloaded_package_*

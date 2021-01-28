@@ -6,6 +6,8 @@ variable "region" {}
 
 variable "domain_name" {}
 
-variable "lambda_edge_function" {}
-
 variable "certificate_arn" {}
+
+variable "unauthenticated_api_url" {}
+
+variable "authenticated_api_url" {}

@@ -102,7 +102,6 @@ resource "aws_lambda_function" "api" {
   environment {
     variables = {
       ALLOWED_MAGICLINK_URL         = var.domain_name
-      AIRCDN_DISTRIBUTION_ID        = var.aircdn_distribution_id
       ENVIRONMENT                   = var.environment
       GATSBY_WEBHOOK_ID             = var.gatsby_webhook_id
       ALBUM_POSTS_TABLE             = var.album_posts_table

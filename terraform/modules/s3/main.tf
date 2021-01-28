@@ -11,15 +11,15 @@ resource "aws_s3_bucket" "app" {
 }
 
 
-resource "aws_s3_bucket_notification" "app" {
-  bucket = aws_s3_bucket.app.id
+# resource "aws_s3_bucket_notification" "app" {
+#   bucket = aws_s3_bucket.app.id
 
-  queue {
-    queue_arn     = var.queue_arn
-    events        = ["s3:ObjectCreated:Put"]
-    filter_suffix = ".log"
-  }
-}
+#   queue {
+#     queue_arn     = var.queue_arn
+#     events        = ["s3:ObjectCreated:Put"]
+#     filter_suffix = ".log"
+#   }
+# }
 
 resource "aws_s3_bucket_policy" "app" {
   bucket = aws_s3_bucket.app.id

@@ -41,27 +41,27 @@ module "lambda" {
   environment            = var.environment
   domain_name            = var.domain_name
   region                 = var.region
-  queue_arn              = module.sqs.sqs_queue_arn
-  queue_url              = module.sqs.sqs_queue_url
+  # queue_arn              = module.sqs.sqs_queue_arn
+  # queue_url              = module.sqs.sqs_queue_url
   # aircdn_distribution_id = module.cloudfront.aircdn_distribution_id
   album_posts_table      = module.dynamodb.album_posts_table
   admin_table            = module.dynamodb.admin_table
   gatsby_webhook_id      = var.gatsby_webhook_id
   sender_email_address   = var.sender_email_address
 }
-module "sqs" {
-  source = "./modules/sqs"
+# module "sqs" {
+#   source = "./modules/sqs"
 
-  namespace   = var.namespace
-  environment = var.environment
-}
+#   namespace   = var.namespace
+#   environment = var.environment
+# }
 module "s3" {
   source = "./modules/s3"
 
   domain_name = var.domain_name
   namespace   = var.namespace
   environment = var.environment
-  queue_arn   = module.sqs.sqs_queue_arn
+  # queue_arn   = module.sqs.sqs_queue_arn
 }
 
 module "route53" {

@@ -6,9 +6,9 @@ variable "region" {}
 
 variable "domain_name" {}
 
-variable "queue_arn" {}
+# variable "queue_arn" {}
 
-variable "queue_url" {}
+# variable "queue_url" {}
 
 variable "admin_table" {}
 

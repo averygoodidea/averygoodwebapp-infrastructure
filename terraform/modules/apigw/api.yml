@@ -1,0 +1,469 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: AVeryGoodWebApp INVENTORY API
+  x-logo:
+    url: "img/averygoodwebapp-logo.png"
+    backgroundColor: "#fff"
+    altText: "AVeryGoodWebApp Logo"
+  contact:
+    email: avery@averygoodidea.com
+    url: "https://${environment}/api/1/docs/"
+  description: "
+    a collection of operations that manage [${environment}](https://${environment}/) data
+
+    # Introduction
+
+    This is a [ReST](https://restfulapi.net/) API that interacts with ${environment} user resources. Specifically, this api enables
+
+    - unauthenticated clients to request album posts from the data store
+
+    - authenticated clients to create, update and delete posts from the data store
+
+
+    This API is documented in **OpenAPI format**, provided by [swagger.io](https://swagger.io) team.
+
+    # Security
+
+    ### AVGA (AveryGoodAuthenticator) Web Token
+
+    Authenticated routes must be accompanied by
+
+    1. a WaterApi api key
+
+    2. an AVeryGoodAuthenticator web token
+
+
+    ```
+    curl --header\"Host: https://${environment}/\" --header\"x-api-key: <waterApiKey> \" --header\"Authorization: <aVeryGoodAuthenticatorWebToken> \" --request GET --url https://${environment}/api/1/admin/album/s3/urls --verbose
+    ```
+
+    <security-definitions />
+  "
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+tags:
+- name: Authenticated Requests
+  description: Operations available to authenticated clients
+- name: Unauthenticated Requests
+  description: Operations available to all clients
+
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "x-api-key"
+    in: "header"
+  AveryGoodAuthenticator:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+
+host: "${environment}"
+basePath: "/api/1"
+schemes:
+ - https
+paths:
+  /api/1/admin/cloudfront-cache:
+    delete:
+      tags:
+      - Authenticated Requests
+      summary: Delete CloudFront Cache
+      operationId: DeleteCloudFrontCache
+      description: Delete a cloudfront cache so that the site pages can be refreshed. Mostly used to give Gatsby Cloud and Site Authors the ability to clear cache on command.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      responses:
+        204:
+          description: success
+        401:
+          description: unauthorized access | this sign in key has expired
+  /api/1/admin/album/post:
+    post:
+      tags:
+      - Authenticated Requests
+      summary: Create Album Post
+      operationId: CreateAlbumPost
+      description: Insert an album post into DynamoDB.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: body
+        name: author
+        description: author to authenticate
+        schema:
+          $ref: '#/definitions/NewAlbumPost'
+      responses:
+        200:
+          description: email sent, header Authorization cookie returned
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              createdAt:
+                type: string
+              slugId:
+                type: string
+        400:
+          description: caught error
+        401:
+          description: unauthorized access | this sign in key has expired
+  /api/1/admin/album/posts/{id}:
+    put:
+      tags:
+      - Authenticated Requests
+      summary: Update Album Post
+      operationId: UpdateAlbumPost
+      description: Update an album post in DynamoDB.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: path
+        name: id
+        required: true
+        type: string
+      - in: body
+        name: author
+        description: author to authenticate
+        schema:
+          $ref: '#/definitions/UpdatedAlbumPost'
+      responses:
+        200:
+          description: success
+          # the below object causes a swagger error so comment it out for now
+          # headers:
+          #   'x-amzn-Remapped-Authorization':
+          #     schema:
+          #       type: string
+          #     description: custom authorization string that initially expires in 24 hours
+        400:
+          description: caught error
+        401:
+          description: unauthorized access | this sign in key has expired
+        404:
+          description: resource not found
+    delete:
+      tags:
+      - Authenticated Requests
+      summary: Delete Album Post
+      operationId: DeleteAlbumPost
+      description: Delete an album post from DynamoDB.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        200:
+          description: success but could potentially throw DynamoDB error
+        204:
+          description: success
+        401:
+          description: resource not found | this sign in key has expired
+        404:
+          description: resource not found
+  /api/1/admin/album/s3/images:
+    delete:
+      tags:
+      - Authenticated Requests
+      summary: Delete Album Post Images
+      operationId: DeleteAlbumImages
+      description: Delete album images from S3.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: query
+        name: ids
+        type: string
+        description: A comma delimited string of image ids to be deleted.
+      responses:
+        200:
+          description: success but could potentially throw DynamoDB error
+        204:
+          description: success
+        400:
+          description: \'ids\' parameter is required.
+        401:
+          description: unauthorized access
+  /api/1/admin/album/s3/urls:
+    get:
+      tags:
+      - Authenticated Requests
+      summary: Get Upload Urls
+      operationId: GetS3UploadUrl
+      description: |
+        Get presigned urls for images to be loaded into S3.
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: query
+        name: amount
+        type: number
+        description: The amount of pre-signed urls to return.
+      responses:
+        200:
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PresignedUrl'
+        401:
+          description: unauthorized access | this sign in key has expired
+  /api/1/album/posts:
+    get:
+      tags:
+      - Unauthenticated Requests
+      summary: Get All Album Posts
+      operationId: GetAlbumPosts
+      description: |
+        Get all album posts in the system.
+      produces:
+      - application/json
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/FetchedAlbumPost'
+  /api/1/album/posts/graphql:
+    get:
+      tags:
+      - Unauthenticated Requests
+      summary: GraphQL Query All Album Posts
+      operationId: RequestGraphQL
+      description: |
+        Query all album posts via GraphQL.
+      produces:
+      - application/json
+      responses:
+        200:
+          description: search results matching criteria in a graphql format
+  /api/1/admin/magic-link:
+    post:
+      tags:
+      - Unauthenticated Requests
+      summary: Send Magic Link
+      operationId: SendAdminMagicLink
+      description: Send a magic link to the submitted email so that an author can authenticate.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: author
+        description: author to authenticate
+        schema:
+          $ref: '#/definitions/Author'
+      responses:
+        204:
+          description: email sent, header Authorization cookie returned
+        400:
+          description: sign in key is malformed
+        404:
+          description: resource not found
+  /api/1/admin/hash:
+    get:
+      tags:
+        - Unauthenticated Requests
+      summary: Verify Hash
+      operationId: VerifyHash
+      description: Confirms that the submitted key matches the sign in key.
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: submittedKey
+        type: string
+        description: submitted key to be matched with sign in key that is retrieved from the Authorization Header
+      responses:
+        200:
+          description: success
+        400:
+          description: verification status is missing | 'email' parameter is malformed.
+        401:
+          description: unauthorized access | this sign in key has expired
+        404:
+          description: resource not found
+definitions:
+  Author:
+    description: author object
+    properties:
+      email:
+        type: string
+        description: email address
+      signInKey:
+        type: string
+        description: sign in key authentication
+  NewAlbumPost:
+    type: object
+    required:
+    - title
+    - summary
+    - images
+    - categories
+    - price
+    - moreInfoUrl
+    properties:
+      title:
+        type: string
+        description: name of the post
+      summary:
+        type: string
+      images:
+        type: array
+        items:
+          type: string
+          description: photo file path in S3
+      categories:
+        type: array
+        items:
+          type: string
+          description: categories of the post
+      price:
+        type: number
+        description: price of the post
+      moreInfoUrl:
+        type: number
+        description: external url to learn more about the post
+  FetchedAlbumPost:
+    type: object
+    required:
+    - id
+    - createdAt
+    - slugId
+    - title
+    - summary
+    - images
+    - categories
+    - price
+    - moreInfoUrl
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: ID of the post
+      createdAt:
+        type: string
+        description: when this post was created
+      slugId:
+        type: string
+        description: url-safe slug id of post
+      title:
+        type: string
+        description: name of the post
+      summary:
+        type: string
+      images:
+        type: array
+        items:
+          type: string
+          description: photo file path in S3
+      categories:
+        type: array
+        items:
+          type: string
+          description: categories of the post
+      price:
+        type: number
+        description: price of the post
+      moreInfoUrl:
+        type: number
+        description: external url to learn more about the post
+  PresignedUrl:
+    description: pre-signed url object
+    properties:
+      uploadURL:
+        type: string
+        description: the s3 url to upload to
+      photoFilename:
+        type: string
+        description: the normalized filename that connects S3 to DynamoDB
+  UpdatedAlbumPost:
+    type: object
+    properties:
+      title:
+        type: string
+        description: name of the post
+      summary:
+        type: string
+      images:
+        type: array
+        items:
+          type: string
+          description: photo file path in S3
+      categories:
+        type: array
+        items:
+          type: string
+          description: categories of the post
+      price:
+        type: number
+        description: price of the post
+      moreInfoUrl:
+        type: number
+        description: external url to learn more about the post

@@ -1,7 +1,14 @@
+data "template_file" "swagger" {
+  template = file("${path.module}/api.yml")
+
+  vars = {
+    environment = var.environment
+  }
+}
 resource "aws_api_gateway_rest_api" "waterapi_authenticated_api" {
   name               = "${var.namespace}-${var.environment}-WaterApiAuthenticatedApi"
   binary_media_types = ["*/*"]
-  # body = "${path.module}/api.yml" ## ADD SWAGGER YAML HERE
+  body = data.template_file.swagger.rendered
 }
 
 resource "aws_api_gateway_api_key" "waterapi_authenticated_api" {

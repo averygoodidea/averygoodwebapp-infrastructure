@@ -13,7 +13,7 @@ cloudformation/waterapi-apikeys.template.yaml
 */.terraform
 *.hcl
 *.log
-*/*.tfvars
+*/terraform.tfvars
 */*.tfstate
 */tmp
 downloaded_package_*

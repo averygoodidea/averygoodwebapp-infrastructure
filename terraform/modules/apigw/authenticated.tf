@@ -1,6 +1,7 @@
 resource "aws_api_gateway_rest_api" "waterapi_authenticated_api" {
   name               = "${var.namespace}-${var.environment}-WaterApiAuthenticatedApi"
   binary_media_types = ["*/*"]
+  # body = "${path.module}/api.yml" ## ADD SWAGGER YAML HERE
 }
 
 resource "aws_api_gateway_api_key" "waterapi_authenticated_api" {

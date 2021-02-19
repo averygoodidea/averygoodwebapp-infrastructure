@@ -1,5 +1,8 @@
 on: [push, pull_request]
 name: Deploy Terraform
+defaults:
+  run:
+    working-directory: terraform
 jobs:
   deploy:
     runs-on: ubuntu-latest

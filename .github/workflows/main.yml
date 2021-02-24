@@ -25,6 +25,6 @@ jobs:
       id: plan
       run: terraform plan -var "gatsby_webhook_id=${{ secrets.GATSBY_WEBHOOK_ID }}" -var-file=dev.tfvars
 
-    # - name: 'Terraform Apply
-      # id: apply
-      # run: terraform apply -var "gatsby_webhook_id=${{ secrets.GATSBY_WEBHOOK_ID }} -var-file=dev.tfvars"
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -var "gatsby_webhook_id=${{ secrets.GATSBY_WEBHOOK_ID }} -var-file=dev.tfvars"

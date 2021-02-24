@@ -21,15 +21,18 @@ resource "aws_lambda_function" "basic_auth" {
   runtime          = "nodejs10.x"
 }
 
+resource "random_id" "basic_auth" {
+  byte_length = 4
+}
+
 resource "aws_lambda_alias" "basic_auth" {
-  name             = "${var.namespace}-${var.environment}-EarthBucketBasicAuthLambdaEdge-alias"
+  name             = "${var.namespace}-${var.environment}-${random_id.basic_auth.id}-EarthBucketBasicAuthLambdaEdge-alias"
   function_name    = aws_lambda_function.basic_auth.function_name
   function_version = "$LATEST"
 }
 
-
 resource "aws_iam_role" "basic_auth" {
-  name = "${var.namespace}-${var.environment}-EarthBucketBasicAuthLambdaEdge-role"
+  name = "${var.namespace}-${var.environment}-${random_id.basic_auth.id}-EarthBucketBasicAuthLambdaEdge-role"
 
   assume_role_policy = <<EOF
 {
@@ -52,7 +55,7 @@ EOF
 }
 
 resource "aws_iam_policy" "basic_auth" {
-  name        = "${var.namespace}-${var.environment}-EarthBucketBasicAuthLambdaEdge-policy"
+  name        = "${var.namespace}-${var.environment}-${random_id.basic_auth.id}-EarthBucketBasicAuthLambdaEdge-policy"
   path        = "/"
   description = "IAM policy for Lambda access to DynamoDB"
 

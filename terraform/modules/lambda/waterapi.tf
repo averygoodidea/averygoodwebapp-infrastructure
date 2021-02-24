@@ -24,8 +24,13 @@ resource "aws_iam_role_policy_attachment" "CloudFrontFullAccess" {
   role       = aws_iam_role.api.name
   policy_arn = data.aws_iam_policy.CloudFrontFullAccess.arn
 }
+
+resource "random_id" "api" {
+  byte_length = 4
+}
+
 resource "aws_iam_role" "api" {
-  name = "${var.namespace}-${var.environment}-api-lambda-role"
+  name = "${var.namespace}-${var.environment}-${random_id.api.id}-api-lambda-role"
 
   assume_role_policy = <<EOF
 {
@@ -94,7 +99,7 @@ data "null_data_source" "downloaded_package" {
 
 resource "aws_lambda_function" "api" {
   filename      = data.null_data_source.downloaded_package.outputs["filename"]
-  function_name = "${var.namespace}-${var.environment}-waterapi"
+  function_name = "${var.namespace}-${var.environment}-${random_id.api.id}-waterapi"
   role          = aws_iam_role.api.arn
   handler       = "index.handler"
   runtime       = "nodejs12.x"

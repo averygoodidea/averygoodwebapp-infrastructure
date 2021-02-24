@@ -27,4 +27,4 @@ jobs:
 
     - name: Terraform Apply
       id: apply
-      run: terraform apply -var "gatsby_webhook_id=${{ secrets.GATSBY_WEBHOOK_ID }} -var-file=dev.tfvars"
+      run: terraform apply -auto-approve -var "gatsby_webhook_id=${{ secrets.GATSBY_WEBHOOK_ID }} -var-file=dev.tfvars"

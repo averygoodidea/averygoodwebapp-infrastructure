@@ -32,7 +32,7 @@ resource "aws_api_gateway_api_key" "waterapi_authenticated_api" {
 resource "aws_api_gateway_resource" "auth_api" {
   rest_api_id = aws_api_gateway_rest_api.waterapi_authenticated_api.id
   parent_id   = aws_api_gateway_rest_api.waterapi_authenticated_api.root_resource_id
-  path_part   = "api"
+  path_part   = "aapi" #terraform chokes if we name this the same as unauthenticated api
 }
 
 resource "aws_api_gateway_resource" "auth_one" {

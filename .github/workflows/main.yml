@@ -23,8 +23,8 @@ jobs:
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -var "gatsby_webhook_id=${{ secrets.GATSBY_WEBHOOK_ID }}" -var-file=dev.tfvars
+      run: terraform plan -var "gatsby_webhook_id=${{ secrets.GATSBY_WEBHOOK_ID }}" -var-file=env/dev.tfvars
 
     - name: Terraform Apply
       id: apply
-      run: terraform apply -auto-approve -var "gatsby_webhook_id=${{ secrets.GATSBY_WEBHOOK_ID }} -var-file=dev.tfvars"
+      run: terraform apply -auto-approve -var "gatsby_webhook_id=${{ secrets.GATSBY_WEBHOOK_ID }} -var-file=env/dev.tfvars"

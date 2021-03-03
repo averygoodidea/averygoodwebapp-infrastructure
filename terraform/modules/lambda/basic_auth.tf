@@ -26,13 +26,13 @@ resource "random_id" "basic_auth" {
 }
 
 resource "aws_lambda_alias" "basic_auth" {
-  name             = "${var.namespace}-${var.environment}-${random_id.basic_auth.id}-EarthBucketBasicAuthLambdaEdge-alias"
+  name             = "${var.namespace}-${var.environment}-${random_id.basic_auth.id}-BasicAuthLambdaEdge-alias"
   function_name    = aws_lambda_function.basic_auth.function_name
   function_version = "$LATEST"
 }
 
 resource "aws_iam_role" "basic_auth" {
-  name = "${var.namespace}-${var.environment}-${random_id.basic_auth.id}-EarthBucketBasicAuthLambdaEdge-role"
+  name = "${var.namespace}-${var.environment}-${random_id.basic_auth.id}-BasicAuthLambdaEdge-role"
 
   assume_role_policy = <<EOF
 {
@@ -55,7 +55,7 @@ EOF
 }
 
 resource "aws_iam_policy" "basic_auth" {
-  name        = "${var.namespace}-${var.environment}-${random_id.basic_auth.id}-EarthBucketBasicAuthLambdaEdge-policy"
+  name        = "${var.namespace}-${var.environment}-${random_id.basic_auth.id}-BasicAuthLambdaEdge-policy"
   path        = "/"
   description = "IAM policy for Lambda access to DynamoDB"
 

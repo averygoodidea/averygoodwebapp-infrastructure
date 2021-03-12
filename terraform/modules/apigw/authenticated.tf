@@ -1,9 +1,8 @@
-data "template_file" "swagger" {
-  template = file("${path.module}/updated-api.yml")
+data "template_file" "authenticated_api_swagger" {
+  template = file("${path.module}/authenticated-api.yml")
 
   vars = {
     environment       = var.environment
-    region            = var.region
     lambda_invoke_arn = var.waterapi_lambda_arn
     namespace         = var.namespace
   }
@@ -11,9 +10,8 @@ data "template_file" "swagger" {
 resource "aws_api_gateway_rest_api" "waterapi_authenticated_api" {
   name               = "${var.namespace}-${var.environment}-WaterApiAuthenticatedApi"
   binary_media_types = ["*/*"]
-  body               = data.template_file.swagger.rendered
+  body               = data.template_file.authenticated_api_swagger.rendered
 }
-
 resource "aws_api_gateway_api_key" "waterapi_authenticated_api" {
   name    = aws_api_gateway_rest_api.waterapi_authenticated_api.name
   enabled = true

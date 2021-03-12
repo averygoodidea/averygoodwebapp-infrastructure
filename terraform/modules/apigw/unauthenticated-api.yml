@@ -1,0 +1,64 @@
+---
+swagger: "2.0"
+info:
+  version: "2020-08-13T05:05:17Z"
+  title: "${namespace}-${environment}-WaterApiUnauthenticatedApi"
+basePath: "/${environment}"
+schemes:
+- "https"
+paths:
+  /api/1/admin/hash:
+    get:
+      responses: {}
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri:   "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses: {}
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri:   "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+  /api/1/admin/magic-link:
+    post:
+      responses: {}
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri:   "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses: {}
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri:   "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+  /api/1/album/posts:
+    get:
+      responses: {}
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri:   "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses: {}
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri:   "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+  /{proxy+}:
+    x-amazon-apigateway-any-method:
+      responses: {}
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri:   "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+x-amazon-apigateway-binary-media-types:
+- "*/*"

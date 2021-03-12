@@ -17,14 +17,14 @@ module "apigw" {
 module "cloudfront" {
   source = "./modules/cloudfront"
 
-  domain_name          = var.domain_name
-  namespace            = var.namespace
-  environment          = var.environment
-  region               = var.region
+  domain_name = var.domain_name
+  namespace   = var.namespace
+  environment = var.environment
+  region      = var.region
   # lambda_edge_function = module.lambda.basic_auth_lambda_function_arn
   unauthenticated_api_url = module.apigw.unauthenticated_api_url
-  authenticated_api_url = module.apigw.authenticated_api_url
-  certificate_arn      = module.acm.ssl_certificate_arn
+  authenticated_api_url   = module.apigw.authenticated_api_url
+  certificate_arn         = module.acm.ssl_certificate_arn
 }
 
 module "dynamodb" {
@@ -37,17 +37,17 @@ module "dynamodb" {
 module "lambda" {
   source = "./modules/lambda"
 
-  namespace              = var.namespace
-  environment            = var.environment
-  domain_name            = var.domain_name
-  region                 = var.region
+  namespace   = var.namespace
+  environment = var.environment
+  domain_name = var.domain_name
+  region      = var.region
   # queue_arn              = module.sqs.sqs_queue_arn
   # queue_url              = module.sqs.sqs_queue_url
   # aircdn_distribution_id = module.cloudfront.aircdn_distribution_id
-  album_posts_table      = module.dynamodb.album_posts_table
-  admin_table            = module.dynamodb.admin_table
-  gatsby_webhook_id      = var.gatsby_webhook_id
-  sender_email_address   = var.sender_email_address
+  album_posts_table    = module.dynamodb.album_posts_table
+  admin_table          = module.dynamodb.admin_table
+  gatsby_webhook_id    = var.gatsby_webhook_id
+  sender_email_address = var.sender_email_address
 }
 # module "sqs" {
 #   source = "./modules/sqs"

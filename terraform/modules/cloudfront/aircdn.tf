@@ -43,7 +43,7 @@ resource "aws_cloudfront_distribution" "aircdn" {
 
   origin {
     domain_name = trimsuffix(trimprefix(var.authenticated_api_url, "https://"), "/")
-    origin_id = "waterapi-authenticated-api"
+    origin_id   = "waterapi-authenticated-api"
     origin_path = "/${var.environment}"
     custom_origin_config {
       http_port              = 80
@@ -55,7 +55,7 @@ resource "aws_cloudfront_distribution" "aircdn" {
 
   origin {
     domain_name = trimsuffix(trimprefix(var.unauthenticated_api_url, "https://"), "/")
-    origin_id = "waterapi-unauthenticated-api"
+    origin_id   = "waterapi-unauthenticated-api"
     origin_path = "/${var.environment}"
     custom_origin_config {
       http_port              = 80
@@ -67,7 +67,7 @@ resource "aws_cloudfront_distribution" "aircdn" {
 
   # Cache behavior with precedence 0
   ordered_cache_behavior {
-    path_pattern = "/api/1/admin/magic-link"
+    path_pattern     = "/api/1/admin/magic-link"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
     target_origin_id = "waterapi-unauthenticated-api"
@@ -89,7 +89,7 @@ resource "aws_cloudfront_distribution" "aircdn" {
 
   # Cache behavior with precedence 1
   ordered_cache_behavior {
-    path_pattern = "/api/1/admin/hash"
+    path_pattern     = "/api/1/admin/hash"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
     target_origin_id = "waterapi-unauthenticated-api"
@@ -111,7 +111,7 @@ resource "aws_cloudfront_distribution" "aircdn" {
 
   # Cache behavior with precedence 2
   ordered_cache_behavior {
-    path_pattern = "/api/1/admin/*"
+    path_pattern     = "/api/1/admin/*"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
     target_origin_id = "waterapi-authenticated-api"
@@ -133,7 +133,7 @@ resource "aws_cloudfront_distribution" "aircdn" {
 
   # Cache behavior with precedence 3
   ordered_cache_behavior {
-    path_pattern = "/api/1/*"
+    path_pattern     = "/api/1/*"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
     target_origin_id = "waterapi-unauthenticated-api"

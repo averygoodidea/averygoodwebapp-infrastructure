@@ -1,0 +1,120 @@
+---
+swagger: "2.0"
+info:
+  version: "2020-08-13T05:05:17Z"
+  title: "${namespace}-${environment}-WaterApiAuthenticatedApi"
+basePath: "/${environment}"
+schemes:
+- "https"
+paths:
+  /api/1/admin/album/post:
+    post:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+  /api/1/admin/album/posts/{id}:
+    put:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    delete:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+  /api/1/admin/album/s3/images:
+    delete:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+  /api/1/admin/album/s3/urls:
+    get:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+  /api/1/admin/cloudfront-cache:
+    delete:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_invoke_arn}"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "x-api-key"
+    in: "header"
+x-amazon-apigateway-binary-media-types:
+- "*/*"

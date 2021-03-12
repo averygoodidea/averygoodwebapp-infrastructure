@@ -7,7 +7,7 @@ data "aws_iam_policy" "AmazonDynamoDBFullAccess" {
 }
 
 data "aws_iam_policy" "CloudFrontFullAccess" {
-  arn  = "arn:aws:iam::aws:policy/CloudFrontFullAccess"
+  arn = "arn:aws:iam::aws:policy/CloudFrontFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole" {

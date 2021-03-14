@@ -17,3 +17,9 @@ cloudformation/waterapi-apikeys.template.yaml
 */*.tfstate
 */tmp
 downloaded_package_*
+# waterapi
+test/thalliumeli-api-v1/test-images/tmp
+redoc.hbs
+swagger.yaml
+.env*
+!.env.*.example

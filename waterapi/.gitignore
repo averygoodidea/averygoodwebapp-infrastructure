@@ -1,9 +1,0 @@
-build
-node_modules
-.DS_Store
-npm-debug.log
-test/thalliumeli-api-v1/test-images/tmp
-redoc.hbs
-swagger.yaml
-.env*
-!.env.*.example

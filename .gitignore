@@ -2,13 +2,6 @@
 build
 templates
 node_modules
-cloudformation/aircdn.template.yaml
-cloudformation/earthbucket.template.yaml
-cloudformation/environment.template.yaml
-cloudformation/firerecord.template.yaml
-cloudformation/global.template.yaml
-cloudformation/waterapi.template.yaml
-cloudformation/waterapi-apikeys.template.yaml
 .env
 */.terraform
 *.hcl
@@ -18,7 +11,7 @@ cloudformation/waterapi-apikeys.template.yaml
 */tmp
 downloaded_package_*
 # waterapi
-test/thalliumeli-api-v1/test-images/tmp
+waterapi/test/thalliumeli-api-v1/test-images/tmp
 redoc.hbs
 swagger.yaml
 .env*

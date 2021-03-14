@@ -82,10 +82,10 @@ module "ses" {
 
 resource "local_file" "waterapi_env_vars" {
     content  = "AWS_WATERAPI_DOCS_BUCKET=${var.namespace}-${var.environment}-waterapi-docs\nAWS_WATERAPI_EMAIL=${var.sender_email_address}\nAWS_WATERAPI_KEY=${module.apigw.api_key}\nDOMAIN_NAME=${var.domain_name}"
-    filename = "${path.module}/../waterapi/env.${var.environment}"
+    filename = "${path.module}/../waterapi/.env.${var.environment}"
 }
 
 resource "local_file" "earthbucket_env_vars" {
-    content  = "AWS_ACCESS_KEY_ID=${var.aws_access_key_id}\nAWS_EARTHBUCKET_APP_BUCKET=${var.namespace}-${var.environment}-earthbucket-app\nAWS_EARTHBUCKET_DOCS_BUCKET=${var.namespace}-${var.environment}-earthbucket-docs\nAWS_EARTHBUCKET_MEDIA_BUCKET=${var.namespace}-${var.environment}-earthbucket-media\nAWS_REGION=${var.region}\nAWS_SECRET_ACCESS_KEY=${var.aws_secret_access_key}\nGATSBY_EARTHBUCKET_HOSTNAME=${var.environment}.${var.domain_name}\nGATSBY_TINYLETTER_USERNAME=${var.tinyletter_username}\nGATSBY_WATERAPI_KEY=${module.apigw.api_key}\nVALINE_LEANCLOUD_APP_ID=${var.valine_leancloud_app_id}\nVALINE_LEANCLOUD_APP_KEY=${var.valine_leancloud_app_key}"
-    filename = "${path.module}/../earthbucket/env.${var.environment}"
+    content  = "AWS_ACCESS_KEY_ID=${var.aws_access_key_id}\nAWS_EARTHBUCKET_APP_BUCKET=${var.namespace}-${var.environment}-earthbucket-app\nAWS_EARTHBUCKET_DOCS_BUCKET=${var.namespace}-${var.environment}-earthbucket-docs\nAWS_EARTHBUCKET_MEDIA_BUCKET=${var.namespace}-${var.environment}-earthbucket-media\nAWS_REGION=${var.region}\nAWS_SECRET_ACCESS_KEY=${var.aws_secret_access_key}\nGATSBY_EARTHBUCKET_HOSTNAME=${var.domain_name}\nGATSBY_TINYLETTER_USERNAME=${var.tinyletter_username}\nGATSBY_WATERAPI_KEY=${module.apigw.api_key}\nVALINE_LEANCLOUD_APP_ID=${var.valine_leancloud_app_id}\nVALINE_LEANCLOUD_APP_KEY=${var.valine_leancloud_app_key}"
+    filename = "${path.module}/../earthbucket/.env.${var.environment}"
 }

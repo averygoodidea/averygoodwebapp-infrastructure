@@ -10,9 +10,3 @@ node_modules
 */*.tfstate
 */tmp
 downloaded_package_*
-# waterapi
-waterapi/test/thalliumeli-api-v1/test-images/tmp
-redoc.hbs
-swagger.yaml
-.env*
-!.env.*.example

@@ -23,6 +23,8 @@ variable "domain_name" {
   default = "test.averygoodweb.app"
 }
 
+# waterapi variables
+
 variable "gatsby_webhook_id" {
   type = string
 }
@@ -30,4 +32,26 @@ variable "gatsby_webhook_id" {
 variable "sender_email_address" {
   type    = string
   default = "avery@averygoodidea.com"
+}
+
+# earthbucket variables
+
+variable "aws_access_key_id" {
+  type = string
+}
+
+variable "aws_secret_access_key" {
+  type = string
+}
+
+variable "tinyletter_username" {
+  type = string
+}
+
+variable "valine_leancloud_app_id" {
+  type = string
+}
+
+variable "valine_leancloud_app_key" {
+  type = string
 }

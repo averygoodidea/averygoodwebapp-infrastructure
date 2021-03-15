@@ -1,0 +1,26 @@
+$background-color: #e6ccbe;
+.scriptureSection {
+    background: $chrome-light-color;
+    padding: 30px;
+	p {
+		margin: 0;
+		line-height: 170%;
+    	font-size: 17px;
+    	color: $content-text-color;
+	}
+
+	@media (max-width: $max-mobile-width) {
+		button {
+			margin-bottom: 20px;
+		}
+	}
+}
+
+.brighten {
+	background: #efded2;
+	.form {
+		.buttonBackground {
+			background: #efded2;
+		}
+	}
+}

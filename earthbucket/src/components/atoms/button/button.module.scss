@@ -1,0 +1,59 @@
+.button {
+	
+	display: inline-block;
+	border-radius: $corner-radius;
+	padding: 8px 20px 10px 10px;
+	text-transform: uppercase;
+	border: none;
+	cursor: pointer;
+	display: flex;
+    align-items: center;
+    line-height: 28px;
+	
+	i {
+		font-size: 180%;
+		margin-right: 10px;
+		vertical-align: sub;
+	}
+	
+	&:hover,
+	&:focus {
+		background: $button-hover-color;
+		color: $button-hover-text-color;
+		i {
+			color: $button-hover-text-color;
+		}
+	}
+
+	&[disabled] {
+		background: #a97c6a;
+		pointer-events: none;
+		color: #e1cbc4;
+	}
+}
+/* themes */
+.default {
+	background: $button-color;
+	/*color: $link-color;*/
+	color: #fff;
+}
+.alt {
+	background: $button-alt-color;
+	color: #fff;
+	
+	i {
+		color: #fff;
+	}
+
+	&:hover,
+	&:focus {
+		background: $button-hover-alt-color;
+	}
+}
+.rightAligned {
+	padding-right: 5px;
+	padding-left: 15px;
+	i {
+		margin-left: 10px;
+	}
+}

@@ -1,0 +1,31 @@
+{
+  "name": "averygoodwebapp-waterapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test:units": "cd test && npx jest waterapi-v1/*.unit.test.js --detectOpenHandles",
+    "test:integrations": "cd test && npx jest waterapi-v1/*.integration.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:averygoodidea/averygoodwebapp-waterapi.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.653.0",
+    "aws-serverless-express": "^3.3.8",
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^15.0.0",
+    "moment": "^2.24.0",
+    "slugid": "^2.0.0",
+    "uuid": "^7.0.3"
+  }
+}

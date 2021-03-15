@@ -1,0 +1,25 @@
+.insert {
+	height: auto;
+	background: $chrome-dark-color;
+	border-radius: $corner-radius;
+	padding: 30px;
+	position: relative;
+	display: inline-block;
+	margin-bottom: 20px;
+
+	h2 {
+		margin-bottom: 30px;
+	}
+
+	img {
+		position: absolute;
+		top: 40px;
+		right: 20px;
+		width: 60px;
+	}
+
+	@media (max-width: $max-mobile-width) {
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+}

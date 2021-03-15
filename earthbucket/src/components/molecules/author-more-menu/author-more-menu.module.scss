@@ -1,0 +1,44 @@
+.authorMoreMenu {
+    position: relative;
+    margin-top: -16px;
+    ul {
+        position:absolute;
+        @include box-shadow;
+        right: 0;
+        list-style-type: none;
+        margin: 0;
+        border: 2px dashed #fa7a57;
+        padding: 10px;
+        background: $chrome-dark-color;
+
+        li button {
+            display: block;
+            padding: 12px 20px;
+            background: $chrome-light-color;
+            border-radius: 0;
+            width: 170px;
+            text-align: left;
+            border-bottom: 3px solid #efded2;
+            text-transform: unset;
+            color: $content-text-color;
+
+            i {
+                color: $link-color;
+            }
+
+            &:hover,
+            &:active,
+            &:focus {
+                background: #fff;
+                color: $link-hover-color;
+                i {
+                    color: $text-color;
+                }
+            }
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+    }
+}

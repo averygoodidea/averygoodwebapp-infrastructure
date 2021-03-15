@@ -1,0 +1,53 @@
+.shareMenu {
+	position: absolute;
+	right: 35px;
+    top: -100px;
+
+    ul {
+    	@include box-shadow;
+        list-style-type: none;
+        margin: 0;
+        border: 2px dashed #fa7a57;
+        padding: 0;
+        background: $chrome-dark-color;
+        width: 243px;
+
+        li {
+        	display: inline-block;
+
+        	button {
+	            display: block;
+	            padding: 12px 20px;
+	            background: $chrome-light-color;
+	            border-radius: 0;
+	            width: 81px;
+	            border: 2px solid $chrome-dark-color;
+	            text-transform: unset;
+
+	            i {
+	            	margin-right: 0;
+	            	color: $link-color;
+	            }
+
+	            &:hover,
+	            &:active,
+	            &:focus {
+	                background: #fff;
+	                color: $link-hover-color;
+	                i {
+	                    color: $text-color;
+	                }
+	            }
+	        }
+        }
+    }
+}
+
+.shareMenu {
+	@media(max-width: $max-mobile-width) {
+		left: 50%;
+        ul {
+            transform: translateX(-50%);
+        }
+	}
+}

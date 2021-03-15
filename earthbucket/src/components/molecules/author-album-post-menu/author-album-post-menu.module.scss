@@ -1,0 +1,126 @@
+.authorAlbumPostsMenu {
+    position: relative;
+    .plusButton {
+        position: absolute;
+        right: 9px;
+        top: -30px;
+
+        i {
+            background: $chrome-dark-color;
+            border-radius: 50px;
+            font-size: 50px;
+        }
+    }
+    ul {
+        list-style-type: none;
+        margin: 10px 5px 10px 0;
+        padding: 0;
+
+        li {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+
+            .ordinal {
+                padding: 12px 10px 12px 5px;
+                width: 25px;
+                text-align: right;
+                color: $text-color;
+            }
+
+            button {
+                display: block;
+                padding: 15px 20px;
+                background: #e3e6f3;
+                width: 100%;
+                text-align: left;
+                border: 2px solid #cacfe8;
+                text-transform: unset;
+                color: $content-text-color;
+
+                &:hover,
+                &:focus {
+                    background: #fff;
+                    color: $link-hover-color;
+                }
+            }
+
+            &.tabbed button {
+                background: #fff;
+                color: $link-hover-color;
+            }
+        }
+    }
+
+    @media (max-width: $max-tablet-width) {
+        .plusButton {
+            right: unset;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        ul {
+            margin-top: 0;
+            li {
+                display: block;
+
+                .ordinal {
+                    padding-bottom: 5px;
+                }
+            }
+        }
+    }
+}
+
+.sortBy {
+    padding-top: 10px;
+    padding-left: 5px;
+    background: $chrome-dark-color;
+    border-top: 2px solid rgba(250,122,87,.5);
+    border-bottom: 2px solid rgba(250,122,87,.5);
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: center;
+
+    button {
+        margin: 20px 2px;
+        font-size: 14px;
+        background: $button-alt-color;
+        padding-right: 10px;
+        line-height: 22px;
+
+        &:hover,
+        &:focus {
+            background: $text-color;
+        }
+    }
+
+    button.tabbed {
+        background: $button-hover-alt-color;
+    }
+}
+
+@media (max-width: $max-tablet-width) {
+    .sortBy {
+        border-left: 5px solid #efded2;
+        display: block;
+
+        button {
+            margin: 0;
+            width: 100%;
+
+            &:first-child {
+                margin-top: 30px;
+            }
+            &:last-child {
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+        }
+    }
+}

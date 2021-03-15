@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8" />
+  <title>FaithInventory API Docs 1.0</title>
+  <!-- needed for adaptive design -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="FaithInventory API Docs 1.0"/>
+  <meta property="og:image" content="/api/1/docs/img/open-graph.jpg"/>
+  <meta property="og:description" content="This is a ReST API that interacts with averygoodweb.app resources."/>
+  <meta property="og:url" content="https://||environment||/api/1/docs/" />
+  <link rel="shortcut icon" href="img/favicon.png" type="image/png"/>
+  <style>
+    
+    /* global */
+
+      body {
+        padding: 0;
+        margin: 0;
+        background: #FFF8F6;
+        font-family: Helvetica, Arial, Sans-Serif;
+      }
+
+      * {
+        font-smooth: auto !important;
+        -webkit-font-smoothing: auto !important;
+      }
+
+      .eHtzbE a,
+      .sc-eTuwsz.eFFwMa a {
+        color: #b43100 !important;
+      }
+
+      .eHtzbE a:hover,
+      .sc-eTuwsz.eFFwMa a:hover {
+        color: #ff3d00 !important;
+      }
+    
+      /* fonts */
+      
+      h1 {
+         font-family: Helvetica, Arial, Sans-Serif !important;
+         color: #553f3d !important;
+      }
+      h2.csolXY,
+      h3[class^=zr04gj],
+      h3.dlDeJR,
+      h5[class^=shv3r-4] {
+        font-family: Helvetica, Arial, Sans-Serif;
+      }
+      /*p,
+      a,
+      table,
+      span,
+      span[class^=sc-10atcbm],
+      strong,
+      div.wbaPa,
+      div.cUzSHk,
+      .redoc-markdown h3 {
+      }*/
+      p,
+      a,
+      table,
+      .api-content li,
+      /*span,*/
+      span[class^=sc-10atcbm],
+      strong,
+      div.wbaPa,
+      div.cUzSHk,
+      .redoc-markdown h3,
+      tr:first-of-type > .ehjTDN,
+      tr.last > .eOMNXV,
+      .hvnOJY td {
+        font-size:110% !important;
+      }
+      div.sc-6itmo6-1.dykNiJ:last-child h2 {
+        font-size: 1.17em;
+        font-weight: bold;
+        color: #333333;
+      }
+
+    /* left column */
+
+      .menu-content.sc-gqPbQI {
+        background: #fcd7cd;
+      }
+      /* logo */
+      .sc-feJyhm.YzuTm {
+        background: #fff6e9 !important;
+        border-bottom: 2px solid rgba(85,63,61,0.16);
+        margin-bottom: 10px;
+      }
+      .active.bsIAmP,
+      .active.dpRZcd,
+      .active.evRQAE,
+      .active.sc-10atcbm-3.active,
+      div.eJUTHL .sc-10atcbm-3.active {
+        background: #edf3f9;
+      }
+      label[class^=sc-10atcbm] {
+        padding: 20px 10px 20px 30px;
+      }
+      /* left column menu item */
+      [role="navigation"] {
+        font-size: 110%;
+      }
+      .chIqbW,
+      .fNeAUJ,
+      .fNeAUJ:hover,
+      [role="menuitem"]:hover {
+        background: #fcf2ea !important;
+        color: #333333 !important;
+      }
+      /* left column search input field */
+      .bJNzQd {
+        border-bottom: none !important;
+      }
+      /* left column search results background */
+      .hhyBQH {
+        background: #fff !important;
+      }
+
+      /* powered by redoc */
+      .sc-elJkPf.cxRqCB {
+        display: none;
+      }
+
+    /* middle column */
+
+      /* content div */
+
+      h2.ioYTqA {
+        color: #915535;
+      }
+      /* content div bottom border */
+
+      .hiuczA {
+        border-bottom: 2px solid rgba(184, 142, 131, 0.61);
+      }
+      .hiuczA:not(:last-of-type):after {
+        border-bottom: none !important;
+      }
+      /* h5 */
+      h5.sc-gqjmRU.LiUBH {
+        border-bottom: 2px solid rgba(85,63,61,0.16) !important;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+
+      h5.sc-gqjmRU.LiUBH .hoUoen {
+        font-size: 110%;
+      }
+      /* parameter label */
+      .hqYVjx {
+        font-size: 90% !important;
+      }
+      /* parameter underline */
+      .kGwPhO {
+        border-bottom: 2px solid rgba(85,63,61,0.16) !important;
+      }
+
+    /* right column */
+
+      div.egwcPy,
+      div.iJUwRU {
+        background: #1f6bb0;
+      }
+      div.fegejV,
+      div.jmkkdP,
+      div.gturBP > .react-tabs__tab-panel {
+        background: #e6ccbe;
+      }
+      div.gWOwls {
+        background: #fbf6f1;
+      }
+      div.gturBP > ul > li {
+        border: none;
+        border-radius: 0;
+        margin-bottom: 0;
+      }
+
+      /* Request Sample text */
+      .sc-gZMcBi.kBWwoV {
+        color: #553f3d;
+      }
+
+      /* callout box */
+      .react-tabs__tab-list {
+        padding-bottom: 10px !important;
+      }
+
+      .hgxMbQ, .eulAfj > .react-tabs__tab-panel {
+        background: #5a608e !important;
+      }
+
+      /* endpoint example tab */
+      .hgxMbQ, .goYvPl {
+        background: #5a608e !important;
+        border-radius: 10px !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+      }
+      .hNiVmK {
+        background: #fcf2ea !important;
+      }
+      /* request/response sample box */
+      .eulAfj > .react-tabs__tab-panel {
+        background: #5a608e !important;
+        border-radius: 10px !important;
+      }
+      /* response sample values color */
+      .jCgylq .token.number {
+        color: #fff !important;
+      }
+
+      .lcundD {
+        background: #1b1717 !important;
+      }
+      .dtUibw {
+        background: none !important;
+        padding-bottom: 60px !important;
+      }
+
+      /* darken green text color */
+      .sc-eXEjpC.bTuXIq,
+      .sc-eXEjpC.dhsNFH {
+        color: #329e3d;
+      }
+      /* status code */
+      .eulAfj > ul > li.tab-success,
+      .eulAfj > ul > li.react-tabs__tab--selected {
+        color: #329e3d !important;
+        border: none;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 110%;
+        line-height: 100%;
+      }
+      .sc-eqIVtm.ecxnvs {
+        padding-top: 15px;
+      }
+      /* darken red text color */
+      .sc-eXEjpC.kZbxUj {
+        color: #b93532;
+      }
+
+      /* right column background graphic */
+      .sc-iujRgT.kTYKTV {
+        background-color: #e6ccbe !important;
+        position: fixed;
+        background-image: url('img/abstract-E5011_30.png');
+        background-repeat: no-repeat;
+        background-size: 300%;
+      }
+
+    /* extras */
+
+      /* close button icon, displayed on mobile breakpoint */
+      .bPGAgL {
+        color: #553f3d !important;
+      }
+
+    /* verb icons in both left and right columns */
+    span.http-verb, span.operation-type {
+      border-radius: 3px !important;
+    }
+
+  </style>
+  {{{redocHead}}}
+</head>
+  <body>
+    {{{redocHTML}}}
+  </body>
+</html>

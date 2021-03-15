@@ -3,7 +3,9 @@
 Prerequisites
 - [An AWS Account with programmatic permission](https://aws.amazon.com/)
 - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
-- [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started)
+- [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started)
+- A [Valine](https://console.leancloud.app/) account
+- A [Gatsby](https://gatsbyjs.com/) cloud account
 
 ## Project Description
 

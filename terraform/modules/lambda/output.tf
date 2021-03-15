@@ -15,5 +15,5 @@ output "waterapi_lambda_function_invoke_arn" {
 # }
 
 output "basic_auth_lambda_function_arn" {
-  value = aws_lambda_function.basic_auth.arn
+  value = aws_lambda_function.basic_auth.qualified_arn
 }

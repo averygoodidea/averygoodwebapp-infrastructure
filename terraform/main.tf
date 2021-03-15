@@ -21,7 +21,7 @@ module "cloudfront" {
   namespace   = var.namespace
   environment = var.environment
   region      = var.region
-  # lambda_edge_function = module.lambda.basic_auth_lambda_function_arn
+  basic_auth_lambda_edge_function_arn = module.lambda.basic_auth_lambda_function_arn
   unauthenticated_api_url = module.apigw.unauthenticated_api_url
   authenticated_api_url   = module.apigw.authenticated_api_url
   certificate_arn         = module.acm.ssl_certificate_arn
@@ -46,6 +46,7 @@ module "lambda" {
   # aircdn_distribution_id = module.cloudfront.aircdn_distribution_id
   album_posts_table    = module.dynamodb.album_posts_table
   admin_table          = module.dynamodb.admin_table
+  basic_auth_table     = module.dynamodb.basic_auth_table
   gatsby_webhook_id    = var.gatsby_webhook_id
   sender_email_address = var.sender_email_address
 }
@@ -81,11 +82,28 @@ module "ses" {
 }
 
 resource "local_file" "waterapi_env_vars" {
-    content  = "AWS_WATERAPI_DOCS_BUCKET=${var.namespace}-${var.environment}-waterapi-docs\nAWS_WATERAPI_EMAIL=${var.sender_email_address}\nAWS_WATERAPI_KEY=${module.apigw.api_key}\nDOMAIN_NAME=${var.domain_name}"
+    content  = <<EOF
+AWS_WATERAPI_DOCS_BUCKET=${var.namespace}-${var.environment}-waterapi-docs
+AWS_WATERAPI_EMAIL=${var.sender_email_address}
+AWS_WATERAPI_KEY=${module.apigw.api_key}
+DOMAIN_NAME=${var.domain_name}
+EOF
     filename = "${path.module}/../waterapi/.env.${var.environment}"
 }
 
 resource "local_file" "earthbucket_env_vars" {
-    content  = "AWS_ACCESS_KEY_ID=${var.aws_access_key_id}\nAWS_EARTHBUCKET_APP_BUCKET=${var.namespace}-${var.environment}-earthbucket-app\nAWS_EARTHBUCKET_DOCS_BUCKET=${var.namespace}-${var.environment}-earthbucket-docs\nAWS_EARTHBUCKET_MEDIA_BUCKET=${var.namespace}-${var.environment}-earthbucket-media\nAWS_REGION=${var.region}\nAWS_SECRET_ACCESS_KEY=${var.aws_secret_access_key}\nGATSBY_EARTHBUCKET_HOSTNAME=${var.domain_name}\nGATSBY_TINYLETTER_USERNAME=${var.tinyletter_username}\nGATSBY_WATERAPI_KEY=${module.apigw.api_key}\nVALINE_LEANCLOUD_APP_ID=${var.valine_leancloud_app_id}\nVALINE_LEANCLOUD_APP_KEY=${var.valine_leancloud_app_key}"
+    content  = <<EOF
+AWS_ACCESS_KEY_ID=${var.aws_access_key_id}
+AWS_EARTHBUCKET_APP_BUCKET=${var.namespace}-${var.environment}-earthbucket-app
+AWS_EARTHBUCKET_DOCS_BUCKET=${var.namespace}-${var.environment}-earthbucket-docs
+AWS_EARTHBUCKET_MEDIA_BUCKET=${var.namespace}-${var.environment}-earthbucket-media
+AWS_REGION=${var.region}
+AWS_SECRET_ACCESS_KEY=${var.aws_secret_access_key}
+GATSBY_EARTHBUCKET_HOSTNAME=${var.domain_name}
+GATSBY_TINYLETTER_USERNAME=${var.tinyletter_username}
+GATSBY_WATERAPI_KEY=${module.apigw.api_key}
+VALINE_LEANCLOUD_APP_ID=${var.valine_leancloud_app_id}
+VALINE_LEANCLOUD_APP_KEY=${var.valine_leancloud_app_key}  
+EOF
     filename = "${path.module}/../earthbucket/.env.${var.environment}"
 }

@@ -132,6 +132,25 @@ resource "aws_cloudfront_distribution" "aircdn" {
   }
 
   # Cache behavior with precedence 3
+    ordered_cache_behavior {
+    path_pattern     = "/api/1/docs*"
+    target_origin_id = "waterapi-docs"
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+
+    forwarded_values {
+      query_string = true
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    default_ttl            = 31536000
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
+  # Cache behavior with precedence 4
   ordered_cache_behavior {
     path_pattern     = "/api/1/*"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -153,10 +172,10 @@ resource "aws_cloudfront_distribution" "aircdn" {
     viewer_protocol_policy = "https-only"
   }
 
-  # Cache behavior with precedence 4
+  # Cache behavior with precedence 5
   ordered_cache_behavior {
-    path_pattern     = "/api/1/docs*"
-    target_origin_id = "waterapi-docs"
+    path_pattern     = "/ui/1/docs*"
+    target_origin_id = "earthbucket-docs"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
 
@@ -173,13 +192,18 @@ resource "aws_cloudfront_distribution" "aircdn" {
   }
 
   default_cache_behavior {
-    target_origin_id       = "earthbucket-docs"
+    target_origin_id       = "earthbucket"
     viewer_protocol_policy = "redirect-to-https"
     allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["GET", "HEAD", "OPTIONS"]
     compress               = true
 
     default_ttl = 31536000 #365 days in seconds
+
+    lambda_function_association {
+      event_type = "viewer-request"
+      lambda_arn = var.basic_auth_lambda_edge_function_arn
+    }
 
     forwarded_values {
       query_string = true

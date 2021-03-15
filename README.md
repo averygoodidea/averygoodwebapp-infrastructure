@@ -59,6 +59,17 @@ terraform {
 }
 ```
 
+Next, edit the following file, `terraform.tfvars`, with your unique credentials.
+
+| variable                 | value                     | description                                                                                                                                                                                                                                                  |
+|--------------------------|---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| aws_access_key_id        | `<awsAccessKeyId>`        | this value can be found by running the following command  `sudo nano ~/.aws/credentials` . You can find it under the aws profile you have been using for this installation guide.                                                                            |
+| aws_secret_access_key    | `<awsSecretAccessKey>`    | this value can be found by running the following command  `sudo nano ~/.aws/credentials` . You can find it under the aws profile you have been using for this installation guide.                                                                            |
+| gatsby_webhook_id        | `<gatsbyWebhookId>`       | the string that connects the infrastructure to Gatsby Cloud. You can  copy and paste this value from gatsbyjs.com/dashboard/ > View Details  > Site Settings > Webhook. Under "Preview Webhook", copy and  paste only the hash string at the end of the url. |
+| tinyletter_username      | `<tinyLetterUsername>`    | your username created at tinyletter.com. This enables your web app to collect user emails out of the box.                                                                                                                                                    |
+| valine_leancloud_app_id  | `<valineLeanCloudAppId>`  | this value enables the EarthBucket Comment Section and can be copied and pasted from https://console.leancloud.app/applist.html#/apps >  `<appTitle>`  > Settings > App keys. Copy the value from AppID.                                                     |
+| valine_leancloud_app_key | `<valineLeanCloudAppKey>` | this value enables the EarthBucket Comment Section and can be copied and pasted from https://console.leancloud.app/applist.html#/apps >  `<appTitle>`  > Settings > App keys. Copy the value from AppKey.                                                    |
+
 To deploy this infrastructure for your app, open the following file:
 
 `env/prod.tfvars`

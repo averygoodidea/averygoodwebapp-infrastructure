@@ -3,6 +3,7 @@
 Prerequisites
 - [An AWS Account with programmatic permission](https://aws.amazon.com/)
 - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
+- [Hygen](http://www.hygen.io/) ```npm -i -g hygen``` to install.  Hygen is used to create files via a template.
 
 ## Project Description
 
@@ -40,21 +41,8 @@ The templates have codenames which represent the "elements" of the infrastructur
 2. On gatsbyjs.com, connect your forked earthbucket repo master branch to gatsby cloud.
 3. Clone your forked version of this repo, ie:
 `git clone git@github.com:<mygithubusername>/averygoodwebapp-infrastructure.git`
-4. Inside the repo, make a copy of the .env.example file
-
-```
-cd ./averygoodwebapp-infrastructure
-cp .env.example .env
-```
-
-5. Open the .env file in your editor of choice, and update its variables file with the appropriate values
-
-| variable           | value                | description                                                                                                                                                                                                                                               |
-|--------------------|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| AWS_WATERAPI_EMAIL | `<awsWaterApiEmail>` | an admin email for your project                                                                                                                                                                                                                           |
-| DOMAIN_NAME        | `<domainName>`       | this project's domain name                                                                                                                                                                                                                                |
-| CACHE_HASH         | `<cacheHash>`        | a work-around to enable a stack to be deployed while a previous Lambda@Edge function deletes. Generate string from random.org, and only update it if CloudFormation throws an error that it cannot delete EarthBucketBasicAuthLambdaEdge.                 |
-| GATSBY_WEBHOOK_ID  | `<gatsbyWebhookId>`  | the string that connects the infrastructure to Gatsby Cloud. You can copy and paste this value from gatsbyjs.com/dashboard/ > View Details > Site Settings > Webhook. Under "Preview Webhook", copy and paste only the hash string at the end of the url. |
+4. ```hygen env new``` and follow the prompts.  This will create a new .env file specifically for your project.  
+This file will contain secrets, so ensure that it does not get committed to version control.
 
 6. Initialize your Global Stack
 `sh ./scripts/init.sh <awsProfile>`

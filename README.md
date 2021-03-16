@@ -61,27 +61,7 @@ Once you do that, you can deploy a fresh infrastructure into a lower environment
 
 To create a lower environment, run the following command:
 
-`terraform workspace new <environment>`
-
-for example:
-
-`terraform workspace new dev`
-
-Then create a corresponding environment file here:
-
-`env/<environment>.tfvars`
-
-for example:
-
-`env/dev.tfvars`
-
-then run the following command:
-
-`terraform apply -var-file=env/<environment>.tfvars`
-
-for example:
-
-`terraform apply -var-file=env/dev.tfvars`
+`sh ./scripts/init-environment.sh --environment <environment> --domainName <domainName> --profile <awsProfile>`
 
 ## How To Update WaterApi ReST Endpoints
 

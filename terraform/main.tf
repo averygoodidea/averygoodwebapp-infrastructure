@@ -83,12 +83,15 @@ module "ses" {
 
 resource "local_file" "waterapi_env_vars" {
     content  = <<EOF
+AWS_AIRCDN_DISTRIBUTION_ID=${module.cloudfront.aircdn_distribution_id}
 AWS_WATERAPI_DOCS_BUCKET=${var.namespace}-${var.environment}-waterapi-docs
+AWS_WATERAPI_DEPLOYMENT_BUCKET=${var.namespace}-${var.environment}-waterapi-api
 AWS_WATERAPI_EMAIL=${var.sender_email_address}
 AWS_WATERAPI_KEY=${module.apigw.api_key}
+AWS_WATERAPI_FUNCTION_NAME=${module.lambda.waterapi_lambda_function_name}
 DOMAIN_NAME=${var.domain_name}
 EOF
-    filename = "${path.module}/../waterapi/.env.${var.environment}"
+    filename = "${path.module}/../waterapi/env/.env.${var.environment}"
 }
 
 resource "local_file" "earthbucket_env_vars" {

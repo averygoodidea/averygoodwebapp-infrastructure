@@ -1,2 +1,2 @@
-environment = "prod"
-domain_name = "averygoodweb.app"
+domain_name   = "averygoodweb.app"
+environment   = "prod"

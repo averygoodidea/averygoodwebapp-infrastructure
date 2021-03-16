@@ -173,3 +173,7 @@ resource "aws_s3_bucket_policy" "api" {
 }
 POLICY
 }
+
+resource "aws_s3_bucket" "waterapi_lambda_deployment_bucket" {
+  bucket = "${var.namespace}-${var.environment}-waterapi-api"
+}

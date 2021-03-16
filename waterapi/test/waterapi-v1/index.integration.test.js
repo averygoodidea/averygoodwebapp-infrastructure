@@ -282,15 +282,7 @@ const getConfig = () => {
 	if (!config.environment) {
 		config.environment = 'dev'
 	}
-	let path = `${__dirname}/../../`
-	switch(config.environment) {
-		case 'prod':
-			path += '.env.production'
-			break
-		case 'dev':
-			path += '.env.development'
-			break
-	}
+	let path = `${__dirname}/../../env/.env.${config.environment}`
 	require('dotenv').config({ path })
 	const {
 		AWS_WATERAPI_EMAIL,
@@ -299,6 +291,6 @@ const getConfig = () => {
 	} = process.env
 	config.apiKey = AWS_WATERAPI_KEY
 	config.email = AWS_WATERAPI_EMAIL
-	config.environmentUrl = `https://${config.environment !== 'prod' ? config.environment + '.' : ''}${DOMAIN_NAME}`
+	config.environmentUrl = `https://${DOMAIN_NAME}`
 	return config
 }

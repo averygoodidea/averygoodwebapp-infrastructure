@@ -1,28 +1,48 @@
-ENVIRONMENT=${1}
-if [ -z $ENVIRONMENT ]; then
-    echo "please provide an environment name as your first argument"
+while [ $# -gt 0 ]; do
+
+   if [[ $1 == *"--"* ]]; then
+        v="${1/--/}"
+        declare $v="$2"
+   fi
+
+  shift
+done
+
+if [ -z $domainName ]; then
+    echo "\nYou didn't provide an '--domainName <domainName>' value. Exiting.\n"
+    exit 1
+elif [ -z $environment ]; then
+    echo "\nYou didn't provide an '--environment <environment>' value. Exiting.\n"
+    exit 1
+elif [ -z $profile ]; then
+    echo "\nYou didn't provide a '--profile <awsProfile>' value. Exiting.\n"
     exit 1
 fi
 
-# initialize backend.tf
+if [ "prod" != $environment ]; then
+    domainName="${environment}.${domainName}"
+fi
 
-# get firerecord_zone value and use for domain_name value
-terraform_vars=$(cat ./terraform/terraform.tfvars)
-str=$(sed '3!d' ./terraform/terraform.tfvars)
-IFS='= ' # space is set as delimiter
-read -ra ADDR <<< "$str"   # str is read into an array as tokens separated by IFS
-for i in "${ADDR[@]}"; do   # access each element of array
-    if [ "domain_name" != $i ]; then
-        domain_name=$(echo $i | cut -d "\"" -f 2)
-        if [ "prod" != $ENVIRONMENT ]; then
-            domain_name="${ENVIRONMENT}.${domain_name}"
-        fi
-        echo "domain_name   = "\"${domain_name}\""\nenvironment   = \"${ENVIRONMENT}\"" > ./terraform/env/${ENVIRONMENT}.tfvars
-    fi
-done
-# apply terraform to environment
+# hygen terraform environment.tfvars file
+HYGEN_OVERWRITE=1 hygen terraform/environment new  \
+    --domainName=$domainName                       \
+    --environment=$environment
+
+# initialize terraform environment
+echo "initialize firerecord and aircdn, and partition for waterapi and earthbucket"
 cd ./terraform
-terraform workspace new $ENVIRONMENT
-terraform apply -var-file=env/${ENVIRONMENT}.tfvars
-# deploy waterapi
+terraform workspace new $environment
+terraform workspace select $environment
+terraform apply -var-file=env/${environment}.tfvars
+
+# initialize waterapi within terraform environment
+echo "\ninitialize waterapi"
+cd ../waterapi
+npm install
+cd ./test
+npm install
+cd ../
+
+sh ./scripts/init.sh --environment $environment --profile $profile
+
 # deploy earthbucket

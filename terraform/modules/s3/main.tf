@@ -32,9 +32,7 @@ resource "aws_s3_bucket_policy" "app" {
     {
       "Sid": "AddS3Perm",
       "Effect": "Allow",
-      "Principal": {
-        "Service": "s3.amazonaws.com"
-      },
+      "Principal": "*",
       "Action": [
         "s3:GetObject",
         "s3:PutObject"

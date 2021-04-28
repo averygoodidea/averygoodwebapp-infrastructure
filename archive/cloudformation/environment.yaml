@@ -1,0 +1,100 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  CacheHash:
+    Type: String
+    Default: <CacheHash>
+  DomainName:
+    Type: String
+    Default: <DomainName>
+  DomainNameRedirect:
+    Type: String
+    Default: <DomainNameRedirect>
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [prod, dev, avery]
+  TemplatesBucketName:
+    Type: String
+    Default: <TemplatesBucketName>
+Resources:
+  WaterApiStack: 
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        DomainName: !Ref DomainName
+        Environment: !Ref Environment
+      TemplateURL: !Sub "https://${TemplatesBucketName}.s3.amazonaws.com/cloudformation/waterapi.template.yaml"
+  WaterApiKeysStack: 
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        DomainName: !Ref DomainName
+        Environment: !Ref Environment
+        WaterApiAuthenticatedApi: !GetAtt WaterApiStack.Outputs.WaterApiAuthenticatedApi
+      TemplateURL: !Sub "https://${TemplatesBucketName}.s3.amazonaws.com/cloudformation/waterapi-apikeys.template.yaml"
+    DependsOn: WaterApiStack
+  EarthBucketStack: 
+    Type: AWS::CloudFormation::Stack
+    Properties: 
+      Parameters:
+        CacheHash: !Ref CacheHash 
+        DomainName: !Ref DomainName
+        Environment: !Ref Environment
+        TemplatesBucketName: !Ref TemplatesBucketName
+      TemplateURL: !Sub "https://${TemplatesBucketName}.s3.amazonaws.com/cloudformation/earthbucket.template.yaml"
+  AirCdnStack: 
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        DomainName: !Ref DomainName
+        DomainNameRedirect: !Ref DomainNameRedirect
+        Environment: !Ref Environment
+        EarthBucketBasicAuthLambdaEdgeVersion: !GetAtt EarthBucketStack.Outputs.EarthBucketBasicAuthLambdaEdgeVersion
+        WaterApiAuthenticatedApiUrl: !GetAtt WaterApiStack.Outputs.WaterApiAuthenticatedApiUrl
+        WaterApiUnauthenticatedApiUrl: !GetAtt WaterApiStack.Outputs.WaterApiUnauthenticatedApiUrl
+      TemplateURL: !Sub "https://${TemplatesBucketName}.s3.amazonaws.com/cloudformation/aircdn.template.yaml"
+    DependsOn:
+    - EarthBucketStack
+    - WaterApiStack
+  FireRecordStack: 
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        AirCdnDomainName: !GetAtt AirCdnStack.Outputs.AirCdnDomainName
+        AirCdnRedirectDomainName: !GetAtt AirCdnStack.Outputs.AirCdnRedirectDomainName
+        DomainName: !Ref DomainName
+        DomainNameRedirect: !Ref DomainNameRedirect
+        Environment: !Ref Environment
+      TemplateURL: !Sub "https://${TemplatesBucketName}.s3.amazonaws.com/cloudformation/firerecord.template.yaml"
+    DependsOn: AirCdnStack
+Outputs:
+  awsRegion:
+    Description: AWS_REGION
+    Value: !Sub ${AWS::Region}
+  awsEarthBucketBasicAuthTable:
+    Description: The Basic Auth Table authorizes which users can access EarthBucket. Only needed in non-"prod" environment stacks.
+    Value: !GetAtt EarthBucketStack.Outputs.EarthBucketBasicAuthTableUrl
+  awsEarthBucketAppBucket:
+    Description: AWS_EARTHBUCKET_APP_BUCKET
+    Value: !GetAtt EarthBucketStack.Outputs.EarthBucketAppS3BucketName
+  awsEarthBucketMediaBucket:
+    Description: AWS_EARTHBUCKET_MEDIA_BUCKET
+    Value: !GetAtt EarthBucketStack.Outputs.EarthBucketMediaS3BucketName
+  awsWaterApiAdminsTable:
+    Description: The Admins Table authorizes which users can authenticate with WaterApi.
+    Value: !GetAtt WaterApiStack.Outputs.WaterApiAdminsTableUrl
+  awsWaterApiEmail:
+    Description: AWS_WATERAPI_EMAIL
+    Value: !GetAtt WaterApiStack.Outputs.WaterApiEmail
+  awsWaterApiKey:
+    Description: Access the value for AWS_WATERAPI_KEY.
+    Value: !GetAtt WaterApiKeysStack.Outputs.WaterApiKeyUrl
+  environment:
+    Description: <Namespace> Stack Environment
+    Value: !Ref Environment
+  gatsbyEarthBucketHostname:
+    Description: GATSBY_EARTHBUCKET_HOSTNAME
+    Value: !Ref DomainName
+  gatsbyWaterApiKey:
+    Description: Access the value for GATSBY_WATERAPI_KEY.
+    Value: !GetAtt WaterApiKeysStack.Outputs.WaterApiKeyUrl

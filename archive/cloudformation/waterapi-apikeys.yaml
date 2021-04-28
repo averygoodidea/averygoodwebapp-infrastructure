@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: WaterApi API Keys (new api key declarations can be added below)
+Parameters:
+  DomainName:
+    Type: String
+    Default: <DomainName>
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [prod, dev, avery]
+  WaterApiAuthenticatedApi:
+    Type: String
+    Default: <WaterApiAuthenticatedApi>
+Resources:
+  WaterApiMasterKey:
+    Type: AWS::ApiGateway::ApiKey
+    Properties: 
+      Name: !Sub <Namespace>-${Environment}-WaterApiMasterKey
+      Enabled: true
+  WaterApiKeyUsagePlan:
+    Type: AWS::ApiGateway::UsagePlan
+    Properties:
+      ApiStages:
+        - ApiId: !Ref WaterApiAuthenticatedApi
+          Stage: !Ref Environment
+      Description: !Sub "${Environment} WaterApi Usage Plan"
+      Quota:
+        Limit: 500
+        Period: DAY
+      Throttle:
+        BurstLimit: 5
+        RateLimit: 5
+      UsagePlanName: !Sub <Namespace>-${Environment}-WaterApiKeyUsagePlan
+  WaterApiUsagePlanKey:
+    Type: AWS::ApiGateway::UsagePlanKey
+    Properties:
+      KeyId: !Ref WaterApiMasterKey
+      KeyType: API_KEY
+      UsagePlanId: !Ref WaterApiKeyUsagePlan
+Outputs:
+  WaterApiKeyUrl:
+    Description: API Key Url
+    Value: !Sub "https://console.aws.amazon.com/apigateway/home?region=${AWS::Region}#/api-keys/${WaterApiMasterKey}"

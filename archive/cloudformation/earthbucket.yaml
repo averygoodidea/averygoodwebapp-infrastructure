@@ -1,0 +1,320 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: EarthBucket Infrastructure (S3, Lambda@Edge, DynamoDB)
+Parameters:
+  CacheHash:
+    Type: String
+    Default: <CacheHash>
+    Description: Work-around to bust Lambda@Edge Caching so this stack can be redeployed much faster
+  DomainName:
+    Type: String
+    Default: <DomainName>
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [prod, dev, avery]
+  TemplatesBucketName:
+    Type: String
+    Default: <TemplatesBucketName>
+Resources:
+  EarthBucketAppS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: !Sub <Namespace>-${Environment}-earthbucket-app
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+      NotificationConfiguration:
+        QueueConfigurations:
+        - Event: s3:ObjectCreated:Put
+          Queue: !GetAtt EarthBucketSQS.Arn
+    DependsOn: EarthBucketSQS
+  EarthBucketAppS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref EarthBucketAppS3Bucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Sid: AddPerm
+          Effect: Allow
+          Principal: '*'
+          Action:
+          - s3:GetObject
+          - s3:PutObject
+          Resource:
+          - !Sub "arn:aws:s3:::<Namespace>-${Environment}-earthbucket-app/*"
+          Condition:
+            StringLike:
+              aws:Referer:
+                # S3 will give a 403 on it's bucket endpoints. It will only return a 200 if AirCdn passes in this designated url.
+                - !Sub "https://${DomainName}/*"
+  EarthBucketMediaS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: !Sub <Namespace>-${Environment}-earthbucket-media
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+      CorsConfiguration:
+        CorsRules:
+          - AllowedOrigins:
+            - !Sub "https://${DomainName}"
+            AllowedMethods:
+            - GET
+            - PUT
+            - DELETE
+            - HEAD
+            AllowedHeaders:
+            - "Content-Type"
+  EarthBucketMediaS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref EarthBucketMediaS3Bucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Sid: AllowPublicRead
+          Effect: Allow
+          Principal: '*'
+          Action:
+          - s3:GetObject
+          - s3:PutObject
+          - s3:PutObjectAcl # without this permission, the presignedurl invoked in EarthBucket responds with a 403 error https://github.com/aws/aws-cli/issues/813#issuecomment-46174965
+          - s3:DeleteObject
+          Resource:
+          - !Sub "arn:aws:s3:::<Namespace>-${Environment}-earthbucket-media/*"
+    DependsOn: EarthBucketMediaS3Bucket
+  EarthBucketBasicAuthLambdaEdge:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub <Namespace>-${Environment}-EarthBucketBasicAuthLambdaEdge-${CacheHash}
+      Runtime: nodejs10.x
+      Handler: index.handler
+      CodeUri:
+        Bucket: !Ref TemplatesBucketName
+        Key: earthbucket-lambda-edge/lambda.zip
+      MemorySize: 128
+      Timeout: 5
+      # More info at https://github.com/awslabs/serverless-application-model/blob/master/docs/safe_lambda_deployments.rst
+      AutoPublishAlias: live
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "sts:AssumeRole"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+                - "edgelambda.amazonaws.com"
+      Policies:
+        - AmazonDynamoDBFullAccess
+  EarthBucketBasicAuthTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: partitionKey
+          KeyType: HASH
+        - AttributeName: authUser
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: partitionKey
+          AttributeType: S
+        - AttributeName: authUser
+          AttributeType: S
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: !Sub "<Namespace>-${Environment}-EarthBucketBasicAuthTable"
+  EarthBucketSQS:
+    Type: AWS::SQS::Queue
+    Properties:
+      MessageRetentionPeriod: 60
+      QueueName: !Sub <Namespace>-${Environment}-EarthBucketSQS
+      ReceiveMessageWaitTimeSeconds: 0 # keep this number to 0
+      VisibilityTimeout: 14400
+  EarthBucketSQSPolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref EarthBucketSQS
+      PolicyDocument:
+        Id: !Sub <Namespace>-${Environment}-EarthBucketSQSPolicy
+        Statement:
+          - Sid: sendAndReceiveMessages
+            Effect: "Allow"
+            Principal: "*"
+            Action:
+              - "sqs:SendMessage" 
+              - "sqs:ReceiveMessage"
+            Resource: !GetAtt EarthBucketSQS.Arn
+  EarthBucketCacheInvalidator:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub <Namespace>-${Environment}-EarthBucketCacheInvalidator
+      Runtime: nodejs12.x
+      Handler: index.handler
+      InlineCode: |
+        const AWS = require('aws-sdk')
+        const { AIRCDN_DISTRIBUTION_ID, QUEUE_URL, REGION } = process.env
+        AWS.config.update({ region: REGION })
+
+        // Create an SQS service object
+        const sqs = new AWS.SQS({apiVersion: '2012-11-05'})
+
+        exports.handler = function (event, context) {
+          // https://gist.github.com/gordonbrander/2230317#gistcomment-3244708
+          const createID = () => {
+              return Array(16)
+                .fill(0)
+                .map(() => String.fromCharCode(Math.floor(Math.random() * 26) + 97))
+                .join('') + 
+                Date.now().toString(24)
+          }
+          const cloudfront = new AWS.CloudFront({apiVersion: '2019-03-26'})
+          const invalidateCloudFrontCache = paths => {
+            var params = {
+                DistributionId: AIRCDN_DISTRIBUTION_ID, /* required */
+                    InvalidationBatch: { /* required */
+                        CallerReference: createID(), /* required */
+                        Paths: { /* required */
+                            Quantity: paths.length, /* required */
+                            Items: paths
+                    }
+                }
+            }
+            cloudfront.createInvalidation(params, function (err, data) {
+                if (err) {
+                    console.log(err, err.stack)  // an error occurred
+                } else {
+                    console.log(data)            // successful response
+                }
+            })
+          }
+          var params = {
+            QueueUrl: QUEUE_URL, /* required */
+            AttributeNames: [
+              'All',
+            ]
+          }
+          sqs.getQueueAttributes(params, function(err, data) {
+            if (err) {
+              //console.log('C', err, err.stack)
+              return false
+            } else {
+              const {
+                ApproximateNumberOfMessages,
+                ApproximateNumberOfMessagesNotVisible,
+                ApproximateNumberOfMessagesDelayed
+              } = data.Attributes
+              
+              //console.log(data)
+              
+              // If SQS is empty
+                // invalidate Cloudfront
+              
+              params = {
+                DistributionId: AIRCDN_DISTRIBUTION_ID,
+                MaxItems: '5'
+              }
+              cloudfront.listInvalidations(params, function(err, data) {
+                if (err) {
+                  console.log(err, err.stack)
+                }
+                else {
+                  // loop through items
+                  // if no item status is in progress
+                    // invalidate
+                  // else if queue appears empty
+                    // invalidate
+                  const invalidationPaths = ['/*']
+                  const statuses = []
+                  data.Items.forEach( ({ Status }) => statuses.push(Status))
+                  if(!statuses.includes('InProgress')) {
+                    //console.log('E1')
+                    invalidateCloudFrontCache(invalidationPaths)
+                  } else {
+                    if (Number(ApproximateNumberOfMessages) <= 1 && Number(ApproximateNumberOfMessagesNotVisible) <= 20  && Number(ApproximateNumberOfMessagesDelayed) <= 1 ) {
+                      const invalidationPaths = ['/*']
+                      invalidateCloudFrontCache(invalidationPaths)
+                    }
+                  }
+                }
+              })
+            }
+          })
+        }
+      Environment:
+        Variables:
+          AIRCDN_DISTRIBUTION_ID: <AirCdnDistributionId>
+          QUEUE_URL: !Ref EarthBucketSQS
+          REGION: !Ref AWS::Region
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt EarthBucketSQS.Arn
+            BatchSize: 10
+      MemorySize: 128
+      Timeout: 20
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - CloudFrontFullAccess
+        - Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+              - sqs:ReceiveMessage
+              - sqs:DeleteMessage
+              - sqs:GetQueueAttributes
+              - sqs:ChangeMessageVisibility
+            Resource: !GetAtt EarthBucketSQS.Arn
+  EarthBucketDocsS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: !Sub <Namespace>-${Environment}-earthbucket-docs
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+  EarthBucketDocsS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref EarthBucketDocsS3Bucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Sid: AddPerm
+          Effect: Allow
+          Principal: '*'
+          Action:
+          - s3:GetObject
+          - s3:PutObject
+          Resource:
+          - !Sub "arn:aws:s3:::<Namespace>-${Environment}-earthbucket-docs/*"
+          Condition:
+            StringLike:
+              aws:Referer:
+                # S3 will give a 403 on it's bucket endpoints. It will only return a 200 AirCdn passes in this designated url.
+                - !Sub "https://${DomainName}/*"
+Outputs:
+  EarthBucketAppS3BucketName:
+    Value: !Ref EarthBucketAppS3Bucket
+    Description: Name of S3 bucket to hold EarthBucket files
+  EarthBucketAppS3BucketWebsiteUrl:
+    Value: !GetAtt EarthBucketAppS3Bucket.WebsiteURL
+    Description: The S3 bucket url
+  EarthBucketMediaS3BucketName:
+    Value: !Ref EarthBucketMediaS3Bucket
+    Description: Name of S3 bucket to hold EarthBucket files
+  EarthBucketMediaS3BucketWebsiteUrl:
+    Value: !GetAtt EarthBucketMediaS3Bucket.WebsiteURL
+    Description: The S3 bucket url
+  EarthBucketBasicAuthLambdaEdgeVersion: 
+    Description: EarthBucketBasicAuthLambdaEdge Version
+    Value: !Ref EarthBucketBasicAuthLambdaEdge.Version
+  EarthBucketBasicAuthTableUrl:
+    Description: The Basic Auth Table authorizes which users can access EarthBucket. Only needed in non-"prod" environment stacks.
+    Value: !Sub "https://console.aws.amazon.com/dynamodb/home?region=${AWS::Region}#tables:selected=${EarthBucketBasicAuthTable};tab=items"

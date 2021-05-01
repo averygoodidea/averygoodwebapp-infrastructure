@@ -5,7 +5,7 @@ Prerequisites
 - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
 - [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started)
 - [NodeJs](https://nodejs.org/en/download/)
-- [Hygen](http://www.hygen.io/) `npm -i -g hygen` to install. Hygen is used to create files via a template.
+- [Hygen](http://www.hygen.io/) `npm i -g hygen` to install. Hygen is used to create files via a template.
 - [nvm] (https://github.com/nvm-sh/nvm) `brew install nvm` to install. NVM is used to manage node versions.
 - [Valine](https://console.leancloud.app/). Create a LeadCloud to use Valine.
 - [Gatsby](https://gatsbyjs.com/). Create a Gatsby Cloud account to connect this project to Gatsby Cloud.

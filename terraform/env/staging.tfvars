@@ -1,2 +1,2 @@
 environment = "staging"
-domain_name = "staging.averygoodweb.app"
+domain_name = "staging.koshermaple.com"

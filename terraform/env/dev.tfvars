@@ -1,2 +1,2 @@
-firerecord_zone = "averygoodweb.app"
-domain_name     = "test.averygoodweb.app"
+firerecord_zone = "koshermaple.com"
+domain_name     = "test.koshermaple.com"

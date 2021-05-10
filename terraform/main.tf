@@ -1,3 +1,12 @@
+module "route53" {
+  source = "./modules/route53"
+
+  firerecord_zone       = var.firerecord_zone
+  domain_name           = var.domain_name
+  alias_distribution    = module.cloudfront.alias_distribution
+  redirect_distribution = module.cloudfront.redirect_distribution
+}
+
 module "acm" {
   source = "./modules/acm"
 
@@ -63,15 +72,6 @@ module "s3" {
   namespace   = var.namespace
   environment = var.environment
   # queue_arn   = module.sqs.sqs_queue_arn
-}
-
-module "route53" {
-  source = "./modules/route53"
-
-  firerecord_zone       = var.firerecord_zone
-  domain_name           = var.domain_name
-  alias_distribution    = module.cloudfront.alias_distribution
-  redirect_distribution = module.cloudfront.redirect_distribution
 }
 
 module "ses" {

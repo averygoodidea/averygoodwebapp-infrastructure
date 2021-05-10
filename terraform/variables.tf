@@ -1,6 +1,6 @@
 variable "firerecord_zone" {
   type    = string
-  default = "averygoodweb.app"
+  default = "koshermaple.com"
 }
 
 variable "region" {
@@ -10,7 +10,7 @@ variable "region" {
 
 variable "namespace" {
   type    = string
-  default = "averygoodwebapp"
+  default = "koshermaple"
 }
 
 variable "environment" {
@@ -20,7 +20,7 @@ variable "environment" {
 
 variable "domain_name" {
   type    = string
-  default = "test.averygoodweb.app"
+  default = "koshermaple.com"
 }
 
 # waterapi variables
@@ -31,7 +31,7 @@ variable "gatsby_webhook_id" {
 
 variable "sender_email_address" {
   type    = string
-  default = "avery@averygoodidea.com"
+  default = "koshermaple@gmail.com"
 }
 
 # earthbucket variables
